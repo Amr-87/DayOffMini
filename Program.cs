@@ -1,4 +1,7 @@
 
+using DayOffMini.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace DayOffMini
 {
     public class Program
@@ -8,6 +11,12 @@ namespace DayOffMini
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            });
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
