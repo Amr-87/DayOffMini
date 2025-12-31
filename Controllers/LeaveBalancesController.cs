@@ -4,12 +4,12 @@ namespace DayOffMini.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BalancesController : ControllerBase
+    public class LeaveBalancesController : ControllerBase
     {
         [HttpGet]
         public IActionResult GetBalances()
         {
-            return Ok("This is a placeholder for BalancesController.");
+            return Ok("This is a placeholder for LeaveBalancesController.");
         }
     }
 }
