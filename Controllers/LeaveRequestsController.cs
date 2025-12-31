@@ -4,7 +4,7 @@ namespace DayOffMini.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LeaveTypesController : ControllerBase
+    public class LeaveRequestsController : ControllerBase
     {
     }
 }

@@ -10,7 +10,7 @@ namespace DayOffMini.Data.Models
 
         public string Name { get; set; } = null!;
 
-        public virtual ICollection<Balance> Balances { get; set; } = new HashSet<Balance>();
-        public virtual ICollection<Request> Requests { get; set; } = new HashSet<Request>();
+        public virtual ICollection<LeaveBalance> LeaveBalances { get; set; } = new HashSet<LeaveBalance>();
+        public virtual ICollection<LeaveRequest> LeaveRequests { get; set; } = new HashSet<LeaveRequest>();
     }
 }
