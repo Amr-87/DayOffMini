@@ -1,6 +1,8 @@
 using DayOffMini.Data.DbContext;
 using DayOffMini.Repositories.Generic;
-using DayOffMini.Services.Generic;
+using DayOffMini.Services.Implementations;
+using DayOffMini.Services.Interfaces;
+using DayOffMini.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace DayOffMini
@@ -19,9 +21,12 @@ namespace DayOffMini
             });
 
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
             builder.Services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
