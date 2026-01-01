@@ -12,8 +12,8 @@ namespace DayOffMini.Data.Models
         public string? Name { get; set; }
         public string? Password { get; set; }
 
-        public virtual ICollection<Request> Requests { get; set; } = new HashSet<Request>();
-        public virtual ICollection<Balance> Balances { get; set; } = new HashSet<Balance>();
+        public virtual ICollection<LeaveRequest> LeaveRequests { get; set; } = new HashSet<LeaveRequest>();
+        public virtual ICollection<LeaveBalance> LeaveBalances { get; set; } = new HashSet<LeaveBalance>();
 
     }
 }

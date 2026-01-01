@@ -1,5 +1,4 @@
-
-using DayOffMini.Data;
+using DayOffMini.Data.DbContext;
 using Microsoft.EntityFrameworkCore;
 
 namespace DayOffMini
