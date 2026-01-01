@@ -18,14 +18,19 @@ namespace DayOffMini.Repositories.Generic
         public async Task CreateAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int entityId)
         {
             var entity = await _dbSet.FindAsync(entityId);
-            _dbSet.Remove(entity!);
-            await _dbContext.SaveChangesAsync();
+            if (entity == null)
+                throw new KeyNotFoundException();
+
+            _dbSet.Remove(entity);
+        }
+        public void UpdateAsync(T entity)
+        {
+            _dbSet.Update(entity);
         }
 
         public async Task<ICollection<T>> GetAllAsync()
@@ -38,10 +43,5 @@ namespace DayOffMini.Repositories.Generic
             return await _dbSet.FindAsync(entityId);
         }
 
-        public async Task UpdateAsync(T entity)
-        {
-            _dbSet.Update(entity);
-            await _dbContext.SaveChangesAsync();
-        }
     }
 }
