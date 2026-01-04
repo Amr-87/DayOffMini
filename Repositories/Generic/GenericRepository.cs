@@ -28,10 +28,6 @@ namespace DayOffMini.Repositories.Generic
 
             _dbSet.Remove(entity);
         }
-        public void UpdateAsync(T entity)
-        {
-            _dbSet.Update(entity);
-        }
 
         public async Task<ICollection<T>> GetAllAsync()
         {

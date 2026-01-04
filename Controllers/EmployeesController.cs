@@ -37,7 +37,11 @@ namespace DayOffMini.Controllers
                 await _employeeService.UpdateAsync(dto);
                 return Ok("employee updated successfully");
             }
-            catch (Exception ex)
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception)
             {
                 return BadRequest();
             }
