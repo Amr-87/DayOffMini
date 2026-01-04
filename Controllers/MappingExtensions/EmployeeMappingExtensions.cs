@@ -3,7 +3,7 @@ using DayOffMini.Data.Models;
 
 namespace DayOffMini.Controllers.MappingExtensions
 {
-    public static class EmployeeMappingExtension
+    public static class EmployeeMappingExtensions
     {
         public static EmployeeDto ToDto(this Employee? employee)
         {

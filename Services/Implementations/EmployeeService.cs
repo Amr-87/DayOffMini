@@ -22,7 +22,7 @@ namespace DayOffMini.Services.Implementations
 
         public async Task UpdateAsync(EmployeeDto entity)
         {
-            _unitOfWork.Employees.UpdateAsync(entity.ToEntity());
+            await _unitOfWork.Employees.UpdateAsync(entity.ToEntity());
             await SaveChangesAsync();
         }
 

@@ -6,10 +6,9 @@ namespace DayOffMini.Services.Interfaces
     {
         Task CreateAsync(EmployeeDto employee);
         Task UpdateAsync(EmployeeDto employee);
-
-        Task DeleteAsync(int employeeId);
         Task<EmployeeDto?> GetByIdAsync(int employeeId);
         Task<ICollection<EmployeeDto>> GetAllAsync();
+        Task DeleteAsync(int employeeId);
 
         Task SaveChangesAsync();
     }

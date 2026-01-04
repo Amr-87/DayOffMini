@@ -1,5 +1,6 @@
 ﻿using DayOffMini.Data.Models;
 using DayOffMini.Repositories.Generic;
+using DayOffMini.Repositories.Interfaces;
 
 namespace DayOffMini.UnitOfWork
 {
@@ -7,7 +8,7 @@ namespace DayOffMini.UnitOfWork
     {
         Task<int> SaveChangesAsync();
 
-        IGenericRepository<Employee> Employees { get; }
+        IEmployeeRepository Employees { get; }
         IGenericRepository<LeaveBalance> LeaveBalances { get; }
         IGenericRepository<LeaveRequest> LeaveRequests { get; }
         IGenericRepository<LeaveRequestStatus> LeaveRequestStatuses { get; }

@@ -14,6 +14,5 @@ namespace DayOffMini.Data.Models
 
         public virtual ICollection<LeaveRequest> LeaveRequests { get; set; } = new HashSet<LeaveRequest>();
         public virtual ICollection<LeaveBalance> LeaveBalances { get; set; } = new HashSet<LeaveBalance>();
-
     }
 }
