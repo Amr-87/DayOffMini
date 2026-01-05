@@ -1,27 +1,23 @@
 ﻿using DayOffMini.Controllers.DTOs;
+using DayOffMini.Controllers.Mapping.Interfaces;
 using DayOffMini.Data.Models;
 
-namespace DayOffMini.Controllers.MappingExtensions
+namespace DayOffMini.Controllers.Mapping.Implementations
 {
-    public static class EmployeeMappingExtension
+    public class EmployeeMapper : IEmployeeMapper
     {
-        public static EmployeeDto ToDto(this Employee? employee)
+        public EmployeeDto ToDto(Employee employee)
         {
-            if (employee == null)
-            {
-                throw new ArgumentNullException();
-            }
             return new EmployeeDto
             {
                 Id = employee.Id,
                 Name = employee.Name,
                 Email = employee.Email,
                 Password = employee.Password
-
             };
         }
 
-        public static Employee ToEntity(this EmployeeDto dto)
+        public Employee ToEntity(EmployeeDto dto)
         {
             return new Employee
             {

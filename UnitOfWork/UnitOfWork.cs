@@ -1,6 +1,4 @@
 ﻿using DayOffMini.Data.DbContext;
-using DayOffMini.Data.Models;
-using DayOffMini.Repositories.Generic;
 
 namespace DayOffMini.UnitOfWork
 {
@@ -8,31 +6,13 @@ namespace DayOffMini.UnitOfWork
     {
         private readonly AppDbContext _dbContext;
 
-        public UnitOfWork(AppDbContext dbContext,
-            IGenericRepository<Employee> employees,
-            IGenericRepository<LeaveBalance> leaveBalances,
-            IGenericRepository<LeaveRequest> leaveRequests,
-            IGenericRepository<LeaveRequestStatus> leaveRequestStatuses,
-            IGenericRepository<LeaveType> leaveTypes
-            )
+        public UnitOfWork(AppDbContext dbContext)
         {
             _dbContext = dbContext;
-            Employees = employees;
-            LeaveBalances = leaveBalances;
-            LeaveRequests = leaveRequests;
-            LeaveRequestStatuses = leaveRequestStatuses;
-            LeaveTypes = leaveTypes;
         }
         public async Task<int> SaveChangesAsync()
         {
             return await _dbContext.SaveChangesAsync();
         }
-
-        public IGenericRepository<Employee> Employees { get; }
-        public IGenericRepository<LeaveBalance> LeaveBalances { get; }
-        public IGenericRepository<LeaveRequest> LeaveRequests { get; }
-        public IGenericRepository<LeaveRequestStatus> LeaveRequestStatuses { get; }
-        public IGenericRepository<LeaveType> LeaveTypes { get; }
-
     }
 }

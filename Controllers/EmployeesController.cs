@@ -37,7 +37,11 @@ namespace DayOffMini.Controllers
                 await _employeeService.UpdateAsync(dto);
                 return Ok("employee updated successfully");
             }
-            catch (Exception ex)
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception)
             {
                 return BadRequest();
             }
@@ -46,15 +50,10 @@ namespace DayOffMini.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEmployeeById(int id)
         {
-            try
-            {
-                var employeeDto = await _employeeService.GetByIdAsync(id);
-                return Ok(employeeDto);
-            }
-            catch (ArgumentNullException)
-            {
+            var employeeDto = await _employeeService.GetByIdAsync(id);
+            if (employeeDto == null)
                 return NotFound();
-            }
+            return Ok(employeeDto);
         }
 
         [HttpGet]
