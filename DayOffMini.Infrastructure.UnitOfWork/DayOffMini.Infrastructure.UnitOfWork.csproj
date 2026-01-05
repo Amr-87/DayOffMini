@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DayOffMini.Infrastructure.Repository\DayOffMini.Infrastructure.Repository.csproj" />
-    <ProjectReference Include="..\DayOffMini.Infrastructure.UnitOfWork\DayOffMini.Infrastructure.UnitOfWork.csproj" />
+    <ProjectReference Include="..\DayOffMini.Infrastructure\DayOffMini.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
