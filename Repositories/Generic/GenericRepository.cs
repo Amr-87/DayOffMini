@@ -1,10 +1,11 @@
 ﻿
 using DayOffMini.Data.DbContext;
+using DayOffMini.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DayOffMini.Repositories.Generic
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class, IEntity
     {
         private readonly AppDbContext _dbContext;
         private readonly DbSet<T> _dbSet;
@@ -36,7 +37,7 @@ namespace DayOffMini.Repositories.Generic
 
         public async Task<T?> GetByIdAsync(int entityId)
         {
-            return await _dbSet.FindAsync(entityId);
+            return await _dbSet.FirstOrDefaultAsync(e => e.Id == entityId);
         }
 
     }

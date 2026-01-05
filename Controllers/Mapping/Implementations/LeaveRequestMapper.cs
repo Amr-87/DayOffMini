@@ -1,16 +1,13 @@
 ﻿using DayOffMini.Controllers.DTOs;
+using DayOffMini.Controllers.Mapping.Interfaces;
 using DayOffMini.Data.Models;
 
-namespace DayOffMini.Controllers.MappingExtensions
+namespace DayOffMini.Controllers.Mapping.Implementations
 {
-    public static class LeaveRequestMappingExtensions
+    public class LeaveRequestMapper : ILeaveRequestMapper
     {
-        public static LeaveRequestDto ToDto(this LeaveRequest? leaveRequest)
+        public LeaveRequestDto ToDto(LeaveRequest leaveRequest)
         {
-            if (leaveRequest == null)
-            {
-                throw new ArgumentNullException();
-            }
             return new LeaveRequestDto
             {
                 Id = leaveRequest.Id,
@@ -23,7 +20,7 @@ namespace DayOffMini.Controllers.MappingExtensions
             };
         }
 
-        public static LeaveRequest ToEntity(this LeaveRequestDto dto)
+        public LeaveRequest ToEntity(LeaveRequestDto dto)
         {
             return new LeaveRequest
             {
