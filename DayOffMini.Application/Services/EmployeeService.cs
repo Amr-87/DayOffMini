@@ -4,7 +4,7 @@ using DayOffMini.Application.Services.Interfaces;
 using DayOffMini.Domain.Interfaces;
 using DayOffMini.Domain.Interfaces.Repositories;
 
-namespace DayOffMini.Application.Services.Implementations
+namespace DayOffMini.Application.Services
 {
     public class EmployeeService : IEmployeeService
     {

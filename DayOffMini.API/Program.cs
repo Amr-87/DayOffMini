@@ -1,13 +1,13 @@
 using DayOffMini.Application.Mapping.Implementations;
 using DayOffMini.Application.Mapping.Interfaces;
-using DayOffMini.Application.Services.Implementations;
+using DayOffMini.Application.Services;
 using DayOffMini.Application.Services.Interfaces;
 using DayOffMini.Domain.Interfaces;
 using DayOffMini.Domain.Interfaces.Repositories;
 using DayOffMini.Infrastructure.DbContext;
 using DayOffMini.Infrastructure.Repositories.Generic;
 using DayOffMini.Infrastructure.Repositories.Implementations;
-using DayOffMini.Infrastructure.UnitOfWork;
+using DayOffMini.Persistence.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace DayOffMini.API

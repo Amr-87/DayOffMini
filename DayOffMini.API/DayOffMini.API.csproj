@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DayOffMini.Application\DayOffMini.Application.csproj" />
-    <ProjectReference Include="..\DayOffMini.Infrastructure\DayOffMini.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
