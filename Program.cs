@@ -1,3 +1,5 @@
+using DayOffMini.Controllers.Mapping.Implementations;
+using DayOffMini.Controllers.Mapping.Interfaces;
 using DayOffMini.Data.DbContext;
 using DayOffMini.Repositories.Generic;
 using DayOffMini.Repositories.Implementations;
@@ -26,6 +28,7 @@ namespace DayOffMini
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeMapper, EmployeeMapper>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
             builder.Services.AddControllers();

@@ -50,15 +50,10 @@ namespace DayOffMini.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEmployeeById(int id)
         {
-            try
-            {
-                var employeeDto = await _employeeService.GetByIdAsync(id);
-                return Ok(employeeDto);
-            }
-            catch (ArgumentNullException)
-            {
+            var employeeDto = await _employeeService.GetByIdAsync(id);
+            if (employeeDto == null)
                 return NotFound();
-            }
+            return Ok(employeeDto);
         }
 
         [HttpGet]
