@@ -2,7 +2,7 @@
 using DayOffMini.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 
-namespace DayOffMini.Infrastructure.Repositories.Generic
+namespace DayOffMini.Infrastructure.Repository.Repositories.Generic
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class, IEntity
     {

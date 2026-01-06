@@ -1,9 +1,9 @@
-﻿using DayOffMini.Domain.Interfaces.Repositories;
+﻿using DayOffMini.Domain.Interfaces.IRepositories;
 using DayOffMini.Domain.Models;
 using DayOffMini.Infrastructure.DbContext;
-using DayOffMini.Infrastructure.Repositories.Generic;
+using DayOffMini.Infrastructure.Repository.Repositories.Generic;
 
-namespace DayOffMini.Infrastructure.Repositories.Implementations
+namespace DayOffMini.Infrastructure.Repository.Repositories.Implementations
 {
     public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
     {

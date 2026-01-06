@@ -1,4 +1,4 @@
-﻿namespace DayOffMini.Application.DTOs
+﻿namespace DayOffMini.Domain.DTOs
 {
     public class LeaveTypeDto
     {

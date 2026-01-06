@@ -1,5 +1,5 @@
-﻿using DayOffMini.Application.DTOs;
-using DayOffMini.Application.Services.Interfaces;
+﻿using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DayOffMini.API.Controllers
@@ -23,7 +23,7 @@ namespace DayOffMini.API.Controllers
                 await _employeeService.CreateAsync(dto);
                 return Ok("employee created successfully");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest();
             }

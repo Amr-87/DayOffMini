@@ -1,6 +1,6 @@
-﻿using DayOffMini.Application.DTOs;
+﻿using DayOffMini.Domain.DTOs;
 
-namespace DayOffMini.Application.Services.Interfaces
+namespace DayOffMini.Domain.Interfaces.IServices
 {
     public interface IEmployeeService
     {

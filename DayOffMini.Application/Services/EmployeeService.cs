@@ -1,8 +1,9 @@
-﻿using DayOffMini.Application.DTOs;
-using DayOffMini.Application.Mapping.Interfaces;
-using DayOffMini.Application.Services.Interfaces;
+﻿using AutoMapper;
+using DayOffMini.Domain.DTOs;
 using DayOffMini.Domain.Interfaces;
-using DayOffMini.Domain.Interfaces.Repositories;
+using DayOffMini.Domain.Interfaces.IRepositories;
+using DayOffMini.Domain.Interfaces.IServices;
+using DayOffMini.Domain.Models;
 
 namespace DayOffMini.Application.Services
 {
@@ -10,9 +11,9 @@ namespace DayOffMini.Application.Services
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IEmployeeMapper _mapper;
+        private readonly IMapper _mapper;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IUnitOfWork unitOfWork, IEmployeeMapper mapper)
+        public EmployeeService(IEmployeeRepository employeeRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _employeeRepository = employeeRepository;
             _unitOfWork = unitOfWork;
@@ -20,14 +21,14 @@ namespace DayOffMini.Application.Services
         }
         public async Task CreateAsync(EmployeeDto employeeDto)
         {
-            var employee = _mapper.ToEntity(employeeDto);
+            var employee = _mapper.Map<Employee>(employeeDto);
             await _employeeRepository.CreateAsync(employee);
             await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(EmployeeDto employeeDto)
         {
-            var employee = _mapper.ToEntity(employeeDto);
+            var employee = _mapper.Map<Employee>(employeeDto);
             await _employeeRepository.UpdateAsync(employee);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -37,16 +38,14 @@ namespace DayOffMini.Application.Services
             var employee = await _employeeRepository.GetByIdAsync(entityId);
             if (employee == null)
                 return null;
-            var employeeDto = _mapper.ToDto(employee);
+            var employeeDto = _mapper.Map<EmployeeDto>(employee);
             return employeeDto;
         }
 
         public async Task<ICollection<EmployeeDto>> GetAllAsync()
         {
             var employees = await _employeeRepository.GetAllAsync();
-            return employees
-                .Select(employee => _mapper.ToDto(employee))
-                .ToList();
+            return _mapper.Map<ICollection<EmployeeDto>>(employees);
         }
 
         public async Task DeleteAsync(int employeeId)
