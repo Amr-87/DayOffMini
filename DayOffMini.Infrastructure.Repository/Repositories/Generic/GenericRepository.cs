@@ -1,6 +1,7 @@
 ﻿using DayOffMini.Domain.Interfaces;
 using DayOffMini.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DayOffMini.Infrastructure.Repository.Repositories.Generic
 {
@@ -25,9 +26,14 @@ namespace DayOffMini.Infrastructure.Repository.Repositories.Generic
             _dbSet.Remove(entity!);
         }
 
-        public async Task<ICollection<T>> GetAllAsync()
+        public async Task<ICollection<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null)
         {
-            return await _dbSet.ToListAsync();
+            IQueryable<T> query = _dbSet;
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            return await query.ToListAsync();
         }
 
         public async Task<T?> GetByIdAsync(int entityId)

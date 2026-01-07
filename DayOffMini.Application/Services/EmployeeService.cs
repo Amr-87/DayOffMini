@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DayOffMini.Application.Policies.Interfaces;
 using DayOffMini.Domain.DTOs;
 using DayOffMini.Domain.Interfaces;
 using DayOffMini.Domain.Interfaces.IServices;
@@ -12,17 +11,18 @@ namespace DayOffMini.Application.Services
         private readonly IGenericRepository<Employee> _genericRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ILeaveBalanceService _leaveBalanceService;
-        private readonly IEmployeeLeavePolicy _employeeLeavePolicy;
+        private readonly IGenericRepository<LeaveType> _leaveTypesGenericRepository;
+        private readonly IGenericRepository<LeaveBalance> _leaveBalanceGenericRepository;
 
         public EmployeeService(IGenericRepository<Employee> genericRepository, IUnitOfWork unitOfWork, IMapper mapper,
-            ILeaveBalanceService leaveBalanceService, IEmployeeLeavePolicy employeeLeavePolicy)
+            IGenericRepository<LeaveType> leaveTypesGenericRepository,
+            IGenericRepository<LeaveBalance> leaveBalanceGenericRepository)
         {
             _genericRepository = genericRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _leaveBalanceService = leaveBalanceService;
-            _employeeLeavePolicy = employeeLeavePolicy;
+            _leaveTypesGenericRepository = leaveTypesGenericRepository;
+            _leaveBalanceGenericRepository = leaveBalanceGenericRepository;
         }
         public async Task CreateAsync(EmployeeDto employeeDto)
         {
@@ -30,11 +30,17 @@ namespace DayOffMini.Application.Services
             await _genericRepository.CreateAsync(employee);
             await _unitOfWork.SaveChangesAsync();
 
-            var leaveBalances = _employeeLeavePolicy.CreateInitialLeaveBalances(employee.Id);
+            var leaveTypes = await _leaveTypesGenericRepository.GetAllAsync(filter: l => l.IsDefault == true);
 
-            foreach (var leaveBalanceDto in leaveBalances)
+            foreach (var leaveType in leaveTypes)
             {
-                await _leaveBalanceService.CreateAsync(leaveBalanceDto);
+                var leaveBalance = new LeaveBalance
+                {
+                    EmployeeId = employee.Id,
+                    LeaveTypeId = leaveType.Id,
+                    DaysOffRemaining = leaveType.DaysOffBalance!.Value
+                };
+                await _leaveBalanceGenericRepository.CreateAsync(leaveBalance);
             }
 
             await _unitOfWork.SaveChangesAsync();
