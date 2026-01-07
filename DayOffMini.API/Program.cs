@@ -1,3 +1,9 @@
+using DayOffMini.API.Middlwares;
+using DayOffMini.Application;
+using DayOffMini.Infrastructure;
+using DayOffMini.Infrastructure.Repository;
+using DayOffMini.Infrastructure.UnitOfWork;
+
 namespace DayOffMini.API
 {
     public class Program
@@ -7,7 +13,10 @@ namespace DayOffMini.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddApplicationServices(builder.Configuration);
+            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddInfrastructureRepositories();
+            builder.Services.AddInfrastructureUOW();
+            builder.Services.AddApplication();
 
             builder.Services.AddControllers();
 
@@ -25,6 +34,8 @@ namespace DayOffMini.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseAuthorization();
 

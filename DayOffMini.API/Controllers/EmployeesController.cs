@@ -18,41 +18,21 @@ namespace DayOffMini.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto dto)
         {
-            try
-            {
-                await _employeeService.CreateAsync(dto);
-                return Ok("employee created successfully");
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            await _employeeService.CreateAsync(dto);
+            return Ok("employee created successfully");
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateEmployee([FromBody] EmployeeDto dto)
         {
-            try
-            {
-                await _employeeService.UpdateAsync(dto);
-                return Ok("employee updated successfully");
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            await _employeeService.UpdateAsync(dto);
+            return Ok("employee updated successfully");
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEmployeeById(int id)
         {
             var employeeDto = await _employeeService.GetByIdAsync(id);
-            if (employeeDto == null)
-                return NotFound();
             return Ok(employeeDto);
         }
 
@@ -66,16 +46,8 @@ namespace DayOffMini.API.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
-            try
-            {
-                await _employeeService.DeleteAsync(id);
-                return Ok("employee deleted successfully");
-            }
-            catch (KeyNotFoundException)
-            {
-                return BadRequest();
-            }
-
+            await _employeeService.DeleteAsync(id);
+            return Ok("employee deleted successfully");
         }
     }
 }

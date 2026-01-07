@@ -18,41 +18,22 @@ namespace DayOffMini.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] LeaveTypeDto dto)
         {
-            try
-            {
-                await _leaveTypeService.CreateAsync(dto);
-                return Ok("leave type created successfully");
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            await _leaveTypeService.CreateAsync(dto);
+            return Ok("leave type created successfully");
         }
 
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] LeaveTypeDto dto)
         {
-            try
-            {
-                await _leaveTypeService.UpdateAsync(dto);
-                return Ok("leave type updated successfully");
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+
+            await _leaveTypeService.UpdateAsync(dto);
+            return Ok("leave type updated successfully");
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var dto = await _leaveTypeService.GetByIdAsync(id);
-            if (dto == null)
-                return NotFound();
             return Ok(dto);
         }
 
@@ -66,16 +47,8 @@ namespace DayOffMini.API.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _leaveTypeService.DeleteAsync(id);
-                return Ok("leave type deleted successfully");
-            }
-            catch (KeyNotFoundException)
-            {
-                return BadRequest();
-            }
-
+            await _leaveTypeService.DeleteAsync(id);
+            return Ok("leave type deleted successfully");
         }
     }
 }
