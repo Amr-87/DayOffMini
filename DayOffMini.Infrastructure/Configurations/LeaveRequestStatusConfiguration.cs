@@ -12,5 +12,11 @@ public class LeaveRequestStatusConfiguration
             new LeaveRequestStatus { Id = 2, Name = "Approved" },
             new LeaveRequestStatus { Id = 3, Name = "Rejected" }
         );
+
+        builder
+             .HasMany(s => s.LeaveRequests)
+             .WithOne(lr => lr.LeaveRequestStatus)
+             .HasForeignKey(lr => lr.LeaveRequestStatusId)
+             .OnDelete(DeleteBehavior.Restrict);
     }
 }
