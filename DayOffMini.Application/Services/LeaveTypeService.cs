@@ -25,17 +25,6 @@ namespace DayOffMini.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int leaveTypeId)
-        {
-            var leaveType = await _genericRepository.GetByIdAsync(leaveTypeId);
-            if (leaveType == null)
-                throw new KeyNotFoundException();
-
-
-            _genericRepository.DeleteAsync(leaveType);
-            await _unitOfWork.SaveChangesAsync();
-        }
-
         public async Task<ICollection<LeaveTypeDto>> GetAllAsync()
         {
             var leaveTypes = await _genericRepository.GetAllAsync();
@@ -46,7 +35,7 @@ namespace DayOffMini.Application.Services
         {
             var leaveType = await _genericRepository.GetByIdAsync(leaveTypeId);
             if (leaveType == null)
-                return null;
+                throw new KeyNotFoundException();
             var leaveTypeDto = _mapper.Map<LeaveTypeDto>(leaveType);
             return leaveTypeDto;
         }

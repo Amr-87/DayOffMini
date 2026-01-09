@@ -1,4 +1,6 @@
-﻿namespace DayOffMini.Domain.DTOs
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DayOffMini.Domain.DTOs
 {
     public class LeaveBalanceDto
     {
@@ -6,7 +8,9 @@
 
         public int EmployeeId { get; set; }
         public int LeaveTypeId { get; set; }
-        public int TotalDaysRemaining { get; set; }
+
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal DaysOffRemaining { get; set; }
 
     }
 }

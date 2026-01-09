@@ -8,6 +8,5 @@ namespace DayOffMini.Domain.Interfaces.IServices
         Task UpdateAsync(LeaveTypeDto leaveTypeDto);
         Task<LeaveTypeDto?> GetByIdAsync(int leaveTypeId);
         Task<ICollection<LeaveTypeDto>> GetAllAsync();
-        Task DeleteAsync(int leaveTypeId);
     }
 }

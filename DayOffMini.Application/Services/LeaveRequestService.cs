@@ -36,7 +36,6 @@ namespace DayOffMini.Application.Services
             if (leaveRequest == null)
                 throw new KeyNotFoundException();
 
-
             _genericRepository.DeleteAsync(leaveRequest);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -51,7 +50,7 @@ namespace DayOffMini.Application.Services
         {
             var leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId);
             if (leaveRequest == null)
-                return null;
+                throw new KeyNotFoundException();
             var leaveRequestDto = _mapper.Map<LeaveRequestDto>(leaveRequest);
             return leaveRequestDto;
         }

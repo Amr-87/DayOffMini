@@ -25,7 +25,7 @@ public class ExceptionMiddleware
         catch (Exception ex)
         {
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            await context.Response.WriteAsync("An error occurred");
+            await context.Response.WriteAsync($"An error occurred, {ex.InnerException!.Message}");
         }
     }
 }

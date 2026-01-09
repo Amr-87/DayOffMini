@@ -43,12 +43,5 @@ namespace DayOffMini.API.Controllers
             var dtos = await _leaveTypeService.GetAllAsync();
             return Ok(dtos);
         }
-
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
-        {
-            await _leaveTypeService.DeleteAsync(id);
-            return Ok("leave type deleted successfully");
-        }
     }
 }

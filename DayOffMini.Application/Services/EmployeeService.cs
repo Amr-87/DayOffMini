@@ -28,20 +28,23 @@ namespace DayOffMini.Application.Services
         {
             var employee = _mapper.Map<Employee>(employeeDto);
             await _genericRepository.CreateAsync(employee);
-            await _unitOfWork.SaveChangesAsync();
 
-            var leaveTypes = await _leaveTypesGenericRepository.GetAllAsync(filter: l => l.IsDefault == true);
+            #region Create Leave Balanaces
+            var leaveTypes = await _leaveTypesGenericRepository
+                   .GetAllAsync(l => l.IsDefault);
 
             foreach (var leaveType in leaveTypes)
             {
                 var leaveBalance = new LeaveBalance
                 {
-                    EmployeeId = employee.Id,
+                    Employee = employee, // let EF handle FK
                     LeaveTypeId = leaveType.Id,
                     DaysOffRemaining = leaveType.DaysOffBalance!.Value
                 };
+
                 await _leaveBalanceGenericRepository.CreateAsync(leaveBalance);
             }
+            #endregion
 
             await _unitOfWork.SaveChangesAsync();
         }
