@@ -7,8 +7,10 @@ namespace DayOffMini.Domain.Interfaces
         Task CreateAsync(T entity);
         void UpdateAsync(T entity);
         void DeleteAsync(T entity);
-        Task<T?> GetByIdAsync(int entityId);
-        //Task<ICollection<T>> GetAllAsync();
-        Task<ICollection<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null);
+        Task<T?> GetByIdAsync(int entityId, params Expression<Func<T, object>>[] includes);
+        Task<ICollection<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
+              Expression<Func<T, object>>? orderBy = null,
+                                     bool ascending = true,
+          params Expression<Func<T, object>>[] includes);
     }
 }

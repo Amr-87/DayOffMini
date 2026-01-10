@@ -8,7 +8,9 @@ namespace DayOffMini.Application.MappingProfiles
     {
         public LeaveBalanceMappingProfile()
         {
-            CreateMap<LeaveBalance, LeaveBalanceDto>().ReverseMap();
+            CreateMap<LeaveBalanceDto, LeaveBalance>().ReverseMap()
+                .ForMember(dest => dest.EmployeeName, op => op.MapFrom(src => src.Employee.Name))
+                .ForMember(dest => dest.LeaveTypeName, op => op.MapFrom(src => src.LeaveType.Name));
         }
     }
 }

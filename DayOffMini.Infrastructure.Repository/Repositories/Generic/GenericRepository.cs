@@ -26,19 +26,65 @@ namespace DayOffMini.Infrastructure.Repository.Repositories.Generic
             _dbSet.Remove(entity!);
         }
 
-        public async Task<ICollection<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null)
+        public async Task<ICollection<T>> GetAllAsync(
+          Expression<Func<T, bool>>? filter = null,
+          Expression<Func<T, object>>? orderBy = null,
+          bool ascending = true,
+          params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _dbSet;
 
             if (filter != null)
                 query = query.Where(filter);
 
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            if (orderBy != null)
+            {
+                query = ascending
+                    ? query.OrderBy(orderBy)
+                    : query.OrderByDescending(orderBy);
+            }
+
             return await query.ToListAsync();
         }
 
-        public async Task<T?> GetByIdAsync(int entityId)
+        public async Task<T?> GetSingleAsync(
+            Expression<Func<T, bool>> filter,
+            params Expression<Func<T, object>>[] includes)
         {
-            return await _dbSet.FirstOrDefaultAsync(e => e.Id == entityId);
+            IQueryable<T> query = _dbSet;
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            return await query.FirstOrDefaultAsync(filter);
+        }
+
+        public async Task<T?> GetByIdAsync(int entityId, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            return await query.FirstOrDefaultAsync(e => e.Id == entityId);
         }
 
         public void UpdateAsync(T entity)

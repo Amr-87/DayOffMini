@@ -8,7 +8,11 @@ namespace DayOffMini.Application.MappingProfiles
     {
         public LeaveRequestMappingProfile()
         {
-            CreateMap<LeaveRequest, LeaveRequestDto>().ReverseMap();
+            CreateMap<LeaveRequestDto, LeaveRequest>().ReverseMap()
+                .ForMember(dest => dest.EmployeeName, op => op.MapFrom(src => src.Employee.Name))
+                .ForMember(dest => dest.LeaveTypeName, op => op.MapFrom(src => src.LeaveType.Name))
+                .ForMember(dest => dest.LeaveRequestStatusName, op => op.MapFrom(src => src.LeaveRequestStatus.Name));
+
             CreateMap<LeaveRequest, CreateLeaveRequestDto>().ReverseMap();
         }
     }

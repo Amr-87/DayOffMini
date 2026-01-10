@@ -42,13 +42,14 @@ namespace DayOffMini.Application.Services
 
         public async Task<ICollection<LeaveRequestDto>> GetAllAsync()
         {
-            var leaveRequests = await _genericRepository.GetAllAsync();
+            var leaveRequests = await _genericRepository
+                .GetAllAsync(null, a => a.Id, true, b => b.Employee, b => b.LeaveType, b => b.LeaveRequestStatus);
             return _mapper.Map<ICollection<LeaveRequestDto>>(leaveRequests);
         }
 
         public async Task<LeaveRequestDto?> GetByIdAsync(int leaveRequestId)
         {
-            var leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId);
+            var leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId, b => b.Employee, b => b.LeaveType, b => b.LeaveRequestStatus);
             if (leaveRequest == null)
                 throw new KeyNotFoundException();
             var leaveRequestDto = _mapper.Map<LeaveRequestDto>(leaveRequest);
