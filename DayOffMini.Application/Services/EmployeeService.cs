@@ -51,21 +51,14 @@ namespace DayOffMini.Application.Services
 
         public async Task UpdateAsync(EmployeeDto employeeDto)
         {
-            var employee = await _genericRepository.GetByIdAsync(employeeDto.Id);
-            if (employee == null)
-                throw new KeyNotFoundException();
-
-            var updatedEmployee = _mapper.Map(employeeDto, employee);
-            _genericRepository.UpdateAsync(updatedEmployee);
+            var updatedEmployee = _mapper.Map<Employee>(employeeDto);
+            _genericRepository.Update(updatedEmployee);
             await _unitOfWork.SaveChangesAsync();
         }
 
         async Task<EmployeeDto?> IEmployeeService.GetByIdAsync(int entityId)
         {
             var employee = await _genericRepository.GetByIdAsync(entityId);
-            if (employee == null)
-                throw new KeyNotFoundException();
-
             var employeeDto = _mapper.Map<EmployeeDto>(employee);
             return employeeDto;
         }
@@ -76,14 +69,10 @@ namespace DayOffMini.Application.Services
             return _mapper.Map<ICollection<EmployeeDto>>(employees);
         }
 
-        public async Task DeleteAsync(int employeeId)
+        public async Task DeleteAsync(EmployeeDto dto)
         {
-            var employee = await _genericRepository.GetByIdAsync(employeeId);
-            if (employee == null)
-                throw new KeyNotFoundException();
-
-
-            _genericRepository.DeleteAsync(employee);
+            var employee = _mapper.Map<Employee>(dto);
+            _genericRepository.Delete(employee);
             await _unitOfWork.SaveChangesAsync();
         }
     }

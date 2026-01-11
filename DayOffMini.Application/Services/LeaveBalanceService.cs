@@ -25,14 +25,10 @@ namespace DayOffMini.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int leaveBalanceId)
+        public async Task DeleteAsync(LeaveBalanceDto dto)
         {
-            var leaveBalance = await _genericRepository.GetByIdAsync(leaveBalanceId);
-            if (leaveBalance == null)
-                throw new KeyNotFoundException();
-
-
-            _genericRepository.DeleteAsync(leaveBalance);
+            var leaveBalance = _mapper.Map<LeaveBalance>(dto);
+            _genericRepository.Delete(leaveBalance);
             await _unitOfWork.SaveChangesAsync();
         }
 
@@ -45,21 +41,14 @@ namespace DayOffMini.Application.Services
         public async Task<LeaveBalanceDto?> GetByIdAsync(int employeeId)
         {
             var leaveBalance = await _genericRepository.GetByIdAsync(employeeId, b => b.Employee, b => b.LeaveType);
-            if (leaveBalance == null)
-                throw new KeyNotFoundException();
-
             var dto = _mapper.Map<LeaveBalanceDto>(leaveBalance);
             return dto;
         }
 
         public async Task UpdateAsync(LeaveBalanceDto dto)
         {
-            var leaveBalance = await _genericRepository.GetByIdAsync(dto.Id);
-            if (leaveBalance == null)
-                throw new KeyNotFoundException();
-
-            var updatedLeaveBalance = _mapper.Map(dto, leaveBalance);
-            _genericRepository.UpdateAsync(updatedLeaveBalance);
+            var updatedLeaveBalance = _mapper.Map<LeaveBalance>(dto);
+            _genericRepository.Update(updatedLeaveBalance);
             await _unitOfWork.SaveChangesAsync();
         }
     }

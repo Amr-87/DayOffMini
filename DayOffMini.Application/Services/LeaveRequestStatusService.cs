@@ -26,8 +26,6 @@ namespace DayOffMini.Application.Services
         public async Task<LeaveRequestStatusDto?> GetByIdAsync(int id)
         {
             var leaveRequestStatus = await _genericRepository.GetByIdAsync(id);
-            if (leaveRequestStatus == null)
-                throw new KeyNotFoundException();
             var dto = _mapper.Map<LeaveRequestStatusDto>(leaveRequestStatus);
             return dto;
         }

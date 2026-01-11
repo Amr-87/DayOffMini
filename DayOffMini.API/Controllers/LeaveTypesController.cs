@@ -25,7 +25,11 @@ namespace DayOffMini.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] LeaveTypeDto dto)
         {
-
+            var existingLeaveType = await _leaveTypeService.GetByIdAsync(dto.Id);
+            if (existingLeaveType == null)
+            {
+                return BadRequest("leave type not found");
+            }
             await _leaveTypeService.UpdateAsync(dto);
             return Ok("leave type updated successfully");
         }
@@ -34,6 +38,10 @@ namespace DayOffMini.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var dto = await _leaveTypeService.GetByIdAsync(id);
+            if (dto == null)
+            {
+                return NotFound("leave type not found");
+            }
             return Ok(dto);
         }
 
@@ -41,6 +49,9 @@ namespace DayOffMini.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var dtos = await _leaveTypeService.GetAllAsync();
+            if (!dtos.Any())
+                return NoContent();
+
             return Ok(dtos);
         }
     }

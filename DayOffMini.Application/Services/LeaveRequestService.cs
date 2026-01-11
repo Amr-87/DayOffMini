@@ -30,13 +30,10 @@ namespace DayOffMini.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int leaveRequestId)
+        public async Task DeleteAsync(LeaveRequestDto dto)
         {
-            var leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId);
-            if (leaveRequest == null)
-                throw new KeyNotFoundException();
-
-            _genericRepository.DeleteAsync(leaveRequest);
+            var leaveRequest = _mapper.Map<LeaveRequest>(dto);
+            _genericRepository.Delete(leaveRequest);
             await _unitOfWork.SaveChangesAsync();
         }
 
@@ -50,20 +47,14 @@ namespace DayOffMini.Application.Services
         public async Task<LeaveRequestDto?> GetByIdAsync(int leaveRequestId)
         {
             var leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId, b => b.Employee, b => b.LeaveType, b => b.LeaveRequestStatus);
-            if (leaveRequest == null)
-                throw new KeyNotFoundException();
             var leaveRequestDto = _mapper.Map<LeaveRequestDto>(leaveRequest);
             return leaveRequestDto;
         }
 
         public async Task UpdateAsync(LeaveRequestDto dto)
         {
-            var leaveRequest = await _genericRepository.GetByIdAsync(dto.Id);
-            if (leaveRequest == null)
-                throw new KeyNotFoundException();
-
-            var updatedLeaveRequest = _mapper.Map(dto, leaveRequest);
-            _genericRepository.UpdateAsync(updatedLeaveRequest);
+            var updatedLeaveRequest = _mapper.Map<LeaveRequest>(dto);
+            _genericRepository.Update(updatedLeaveRequest);
             await _unitOfWork.SaveChangesAsync();
         }
     }

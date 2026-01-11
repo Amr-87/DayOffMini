@@ -8,6 +8,6 @@ namespace DayOffMini.Domain.Interfaces.IServices
         Task UpdateAsync(LeaveBalanceDto dto);
         Task<LeaveBalanceDto?> GetByIdAsync(int employeeId);
         Task<ICollection<LeaveBalanceDto>> GetAllAsync();
-        Task DeleteAsync(int leaveBalanceId);
+        Task DeleteAsync(LeaveBalanceDto dto);
     }
 }

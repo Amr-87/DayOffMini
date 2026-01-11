@@ -25,7 +25,11 @@ namespace DayOffMini.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] LeaveRequestDto dto)
         {
-
+            var existingLeaveRequest = await _leaveRequestService.GetByIdAsync(dto.Id);
+            if (existingLeaveRequest == null)
+            {
+                return BadRequest("leave request not found");
+            }
             await _leaveRequestService.UpdateAsync(dto);
             return Ok("leave request updated successfully");
         }
@@ -34,6 +38,10 @@ namespace DayOffMini.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var dto = await _leaveRequestService.GetByIdAsync(id);
+            if (dto == null)
+            {
+                return NotFound("leave request not found");
+            }
             return Ok(dto);
         }
 
@@ -41,13 +49,21 @@ namespace DayOffMini.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var dtos = await _leaveRequestService.GetAllAsync();
+            if (!dtos.Any())
+                return NoContent();
+
             return Ok(dtos);
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            await _leaveRequestService.DeleteAsync(id);
+            var existingLeaveRequest = await _leaveRequestService.GetByIdAsync(id);
+            if (existingLeaveRequest == null)
+            {
+                return BadRequest("leave request not found");
+            }
+            await _leaveRequestService.DeleteAsync(existingLeaveRequest);
             return Ok("leave request deleted successfully");
         }
     }

@@ -34,20 +34,14 @@ namespace DayOffMini.Application.Services
         public async Task<LeaveTypeDto?> GetByIdAsync(int leaveTypeId)
         {
             var leaveType = await _genericRepository.GetByIdAsync(leaveTypeId);
-            if (leaveType == null)
-                throw new KeyNotFoundException();
             var leaveTypeDto = _mapper.Map<LeaveTypeDto>(leaveType);
             return leaveTypeDto;
         }
 
         public async Task UpdateAsync(LeaveTypeDto leaveTypeDto)
         {
-            var leaveType = await _genericRepository.GetByIdAsync(leaveTypeDto.Id);
-            if (leaveType == null)
-                throw new KeyNotFoundException();
-
-            var updatedLeaveType = _mapper.Map(leaveTypeDto, leaveType);
-            _genericRepository.UpdateAsync(updatedLeaveType);
+            var updatedLeaveType = _mapper.Map<LeaveType>(leaveTypeDto);
+            _genericRepository.Update(updatedLeaveType);
             await _unitOfWork.SaveChangesAsync();
         }
     }

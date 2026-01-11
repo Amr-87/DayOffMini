@@ -21,7 +21,7 @@ namespace DayOffMini.Infrastructure.Repository.Repositories.Generic
             await _dbSet.AddAsync(entity);
         }
 
-        public void DeleteAsync(T entity)
+        public void Delete(T entity)
         {
             _dbSet.Remove(entity!);
         }
@@ -55,23 +55,6 @@ namespace DayOffMini.Infrastructure.Repository.Repositories.Generic
             return await query.ToListAsync();
         }
 
-        public async Task<T?> GetSingleAsync(
-            Expression<Func<T, bool>> filter,
-            params Expression<Func<T, object>>[] includes)
-        {
-            IQueryable<T> query = _dbSet;
-
-            if (includes != null)
-            {
-                foreach (var include in includes)
-                {
-                    query = query.Include(include);
-                }
-            }
-
-            return await query.FirstOrDefaultAsync(filter);
-        }
-
         public async Task<T?> GetByIdAsync(int entityId, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _dbSet;
@@ -87,7 +70,7 @@ namespace DayOffMini.Infrastructure.Repository.Repositories.Generic
             return await query.FirstOrDefaultAsync(e => e.Id == entityId);
         }
 
-        public void UpdateAsync(T entity)
+        public void Update(T entity)
         {
             _dbSet.Update(entity);
         }

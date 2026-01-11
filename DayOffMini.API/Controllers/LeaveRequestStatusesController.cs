@@ -18,6 +18,10 @@ namespace DayOffMini.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var dto = await _leaveRequestStatusService.GetByIdAsync(id);
+            if (dto == null)
+            {
+                return NotFound("leave request status not found");
+            }
             return Ok(dto);
         }
 
@@ -25,6 +29,9 @@ namespace DayOffMini.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var dtos = await _leaveRequestStatusService.GetAllAsync();
+            if (!dtos.Any())
+                return NoContent();
+
             return Ok(dtos);
         }
     }
