@@ -49,12 +49,18 @@ namespace DayOffMini.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(EmployeeDto employeeDto)
+        public async Task UpdateAsync(int id, UpdateEmployeeDto dto)
         {
-            var updatedEmployee = _mapper.Map<Employee>(employeeDto);
-            _genericRepository.Update(updatedEmployee);
+            var employee = await _genericRepository.GetByIdAsync(id)
+                ?? throw new KeyNotFoundException($"Employee with ID {id} not found");
+
+            // Map only updated fields onto tracked entity
+            _mapper.Map(dto, employee);
+
+            // No Update() call needed – entity is tracked
             await _unitOfWork.SaveChangesAsync();
         }
+
 
         async Task<EmployeeDto?> IEmployeeService.GetByIdAsync(int entityId)
         {

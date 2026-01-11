@@ -22,17 +22,11 @@ namespace DayOffMini.API.Controllers
             return Ok("employee created successfully");
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] EmployeeDto dto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateEmployeeDto dto)
         {
-            var existingEmployee = await _employeeService.GetByIdAsync(dto.Id);
-            if (existingEmployee == null)
-            {
-                return BadRequest("employee not found");
-            }
-
-            await _employeeService.UpdateAsync(dto);
-            return Ok("employee updated successfully");
+            await _employeeService.UpdateAsync(id, dto);
+            return NoContent(); // REST standard for PUT
         }
 
         [HttpGet("{id}")]
