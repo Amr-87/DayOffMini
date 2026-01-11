@@ -1,15 +1,13 @@
-﻿using DayOffMini.Application.DTOs;
+﻿using DayOffMini.Domain.DTOs;
 
-namespace DayOffMini.Application.Services.Interfaces
+namespace DayOffMini.Domain.Interfaces.IServices
 {
     public interface ILeaveRequestService
     {
-        Task CreateAsync(LeaveRequestDto leaveRequest);
-        Task UpdateAsync(LeaveRequestDto leaveRequest);
+        Task CreateAsync(CreateLeaveRequestDto dto);
+        Task UpdateAsync(LeaveRequestDto dto);
         Task<LeaveRequestDto?> GetByIdAsync(int leaveRequestId);
         Task<ICollection<LeaveRequestDto>> GetAllAsync();
-        Task DeleteAsync(int leaveRequestId);
-
-        Task SaveChangesAsync();
+        Task DeleteAsync(LeaveRequestDto dto);
     }
 }

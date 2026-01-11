@@ -1,8 +1,9 @@
 ﻿using DayOffMini.Domain.Interfaces;
 using DayOffMini.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
-namespace DayOffMini.Infrastructure.Repositories.Generic
+namespace DayOffMini.Infrastructure.Repository.Repositories.Generic
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class, IEntity
     {
@@ -20,24 +21,58 @@ namespace DayOffMini.Infrastructure.Repositories.Generic
             await _dbSet.AddAsync(entity);
         }
 
-        public async Task DeleteAsync(int entityId)
+        public void Delete(T entity)
         {
-            var entity = await _dbSet.FindAsync(entityId);
-            if (entity == null)
-                throw new KeyNotFoundException();
-
-            _dbSet.Remove(entity);
+            _dbSet.Remove(entity!);
         }
 
-        public async Task<ICollection<T>> GetAllAsync()
+        public async Task<ICollection<T>> GetAllAsync(
+          Expression<Func<T, bool>>? filter = null,
+          Expression<Func<T, object>>? orderBy = null,
+          bool ascending = true,
+          params Expression<Func<T, object>>[] includes)
         {
-            return await _dbSet.ToListAsync();
+            IQueryable<T> query = _dbSet;
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            if (orderBy != null)
+            {
+                query = ascending
+                    ? query.OrderBy(orderBy)
+                    : query.OrderByDescending(orderBy);
+            }
+
+            return await query.ToListAsync();
         }
 
-        public async Task<T?> GetByIdAsync(int entityId)
+        public async Task<T?> GetByIdAsync(int entityId, params Expression<Func<T, object>>[] includes)
         {
-            return await _dbSet.FirstOrDefaultAsync(e => e.Id == entityId);
+            IQueryable<T> query = _dbSet;
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            return await query.FirstOrDefaultAsync(e => e.Id == entityId);
         }
 
+        public void Update(T entity)
+        {
+            _dbSet.Update(entity);
+        }
     }
 }

@@ -1,5 +1,5 @@
-﻿using DayOffMini.Application.DTOs;
-using DayOffMini.Application.Services.Interfaces;
+﻿using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DayOffMini.API.Controllers
@@ -16,66 +16,56 @@ namespace DayOffMini.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateEmployeeDto dto)
         {
-            try
-            {
-                await _employeeService.CreateAsync(dto);
-                return Ok("employee created successfully");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
+            await _employeeService.CreateAsync(dto);
+            return Ok("employee created successfully");
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateEmployee([FromBody] EmployeeDto dto)
+        public async Task<IActionResult> Update([FromBody] EmployeeDto dto)
         {
-            try
+            var existingEmployee = await _employeeService.GetByIdAsync(dto.Id);
+            if (existingEmployee == null)
             {
-                await _employeeService.UpdateAsync(dto);
-                return Ok("employee updated successfully");
+                return BadRequest("employee not found");
             }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+
+            await _employeeService.UpdateAsync(dto);
+            return Ok("employee updated successfully");
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetEmployeeById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var employeeDto = await _employeeService.GetByIdAsync(id);
             if (employeeDto == null)
-                return NotFound();
+            {
+                return NotFound("employee not found");
+            }
             return Ok(employeeDto);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllEmployees()
+        public async Task<IActionResult> GetAll()
         {
-            var employeesDto = await _employeeService.GetAllAsync();
-            return Ok(employeesDto);
+            var dtos = await _employeeService.GetAllAsync();
+            if (!dtos.Any())
+                return NoContent();
+
+            return Ok(dtos);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteEmployee(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
+            var existingEmployee = await _employeeService.GetByIdAsync(id);
+            if (existingEmployee == null)
             {
-                await _employeeService.DeleteAsync(id);
-                return Ok("employee deleted successfully");
+                return BadRequest("employee not found");
             }
-            catch (KeyNotFoundException)
-            {
-                return BadRequest();
-            }
-
+            await _employeeService.DeleteAsync(existingEmployee);
+            return Ok("employee deleted successfully");
         }
     }
 }

@@ -1,13 +1,13 @@
-﻿using DayOffMini.Application.DTOs;
+﻿using DayOffMini.Domain.DTOs;
 
-namespace DayOffMini.Application.Services.Interfaces
+namespace DayOffMini.Domain.Interfaces.IServices
 {
     public interface IEmployeeService
     {
-        Task CreateAsync(EmployeeDto employeeDto);
+        Task CreateAsync(CreateEmployeeDto employeeDto);
         Task UpdateAsync(EmployeeDto employeeDto);
         Task<EmployeeDto?> GetByIdAsync(int employeeId);
         Task<ICollection<EmployeeDto>> GetAllAsync();
-        Task DeleteAsync(int employeeId);
+        Task DeleteAsync(EmployeeDto employeeDto);
     }
 }

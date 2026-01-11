@@ -1,14 +1,8 @@
-using DayOffMini.Application.Mapping.Implementations;
-using DayOffMini.Application.Mapping.Interfaces;
-using DayOffMini.Application.Services;
-using DayOffMini.Application.Services.Interfaces;
-using DayOffMini.Domain.Interfaces;
-using DayOffMini.Domain.Interfaces.Repositories;
-using DayOffMini.Infrastructure.DbContext;
-using DayOffMini.Infrastructure.Repositories.Generic;
-using DayOffMini.Infrastructure.Repositories.Implementations;
-using DayOffMini.Persistence.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
+using DayOffMini.API.Middlwares;
+using DayOffMini.Application;
+using DayOffMini.Infrastructure;
+using DayOffMini.Infrastructure.Repository;
+using DayOffMini.Infrastructure.UnitOfWork;
 
 namespace DayOffMini.API
 {
@@ -17,20 +11,12 @@ namespace DayOffMini.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             // Add services to the container.
-            builder.Services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            });
-
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            builder.Services.AddScoped<IEmployeeMapper, EmployeeMapper>();
-            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddInfrastructureRepositories();
+            builder.Services.AddInfrastructureUOW();
+            builder.Services.AddApplication();
 
             builder.Services.AddControllers();
 
@@ -48,6 +34,8 @@ namespace DayOffMini.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseAuthorization();
 

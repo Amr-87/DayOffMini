@@ -1,7 +1,7 @@
 ﻿using DayOffMini.Domain.Interfaces;
 using DayOffMini.Infrastructure.DbContext;
 
-namespace DayOffMini.Persistence.UnitOfWork
+namespace DayOffMini.Infrastructure.UnitOfWork.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

@@ -1,0 +1,230 @@
+{
+	"info": {
+		"_postman_id": "1e8c3612-3579-4cf2-a4d0-d00da987b6a9",
+		"name": "DayOffMini",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37445103"
+	},
+	"item": [
+		{
+			"name": "create employee",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"amr\",\r\n  \"name\": \"amr\",\r\n  \"password\": \"amr\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5176/api/Employees",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5176",
+					"path": [
+						"api",
+						"Employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get employees list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"amr\",\r\n  \"name\": \"amr\",\r\n  \"password\": \"amr\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5176/api/Employees",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5176",
+					"path": [
+						"api",
+						"Employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get leave balances",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5176/api/LeaveBalances",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5176",
+					"path": [
+						"api",
+						"LeaveBalances"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit leave balance",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 33,\r\n        \"employeeId\": 22,\r\n        \"employeeName\": \"amr\",\r\n        \"leaveTypeId\": 3,\r\n        \"leaveTypeName\": \"El 3eed el kbeer\",\r\n        \"daysOffRemaining\": 17.00\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5176/api/LeaveBalances",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5176",
+					"path": [
+						"api",
+						"LeaveBalances"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create leave request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"employeeId\": 21,\r\n  \"leaveTypeId\": 4,\r\n  \"startDate\": \"2026-01-11T08:42:06.445Z\",\r\n  \"endDate\": \"2026-01-11T08:42:06.445Z\",\r\n  \"reason\": \"kda\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5176/api/LeaveRequests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5176",
+					"path": [
+						"api",
+						"LeaveRequests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get leave requests",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 7,\r\n  \"employeeId\": 21,\r\n  \"employeeName\": \"string\",\r\n  \"leaveTypeId\": 4,\r\n  \"leaveTypeName\": \"string\",\r\n  \"leaveRequestStatusId\": 1,\r\n  \"leaveRequestStatusName\": \"string\",\r\n  \"startDate\": \"2026-01-11T08:46:50.555Z\",\r\n  \"endDate\": \"2026-01-11T08:46:50.555Z\",\r\n  \"reason\": \"kdaaa\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5176/api/LeaveRequests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5176",
+					"path": [
+						"api",
+						"LeaveRequests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit leave request",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 7,\r\n  \"employeeId\": 21,\r\n  \"employeeName\": \"string\",\r\n  \"leaveTypeId\": 4,\r\n  \"leaveTypeName\": \"string\",\r\n  \"leaveRequestStatusId\": 1,\r\n  \"leaveRequestStatusName\": \"string\",\r\n  \"startDate\": \"2026-01-11T08:46:50.555Z\",\r\n  \"endDate\": \"2026-01-11T08:46:50.555Z\",\r\n  \"reason\": \"kda!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5176/api/LeaveRequests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5176",
+					"path": [
+						"api",
+						"LeaveRequests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete leave request",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 7,\r\n  \"employeeId\": 21,\r\n  \"employeeName\": \"string\",\r\n  \"leaveTypeId\": 4,\r\n  \"leaveTypeName\": \"string\",\r\n  \"leaveRequestStatusId\": 1,\r\n  \"leaveRequestStatusName\": \"string\",\r\n  \"startDate\": \"2026-01-11T08:46:50.555Z\",\r\n  \"endDate\": \"2026-01-11T08:46:50.555Z\",\r\n  \"reason\": \"kda!\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5176/api/LeaveRequests?id=7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5176",
+					"path": [
+						"api",
+						"LeaveRequests"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "7"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
