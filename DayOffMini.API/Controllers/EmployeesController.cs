@@ -16,7 +16,7 @@ namespace DayOffMini.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto dto)
+        public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeDto dto)
         {
             await _employeeService.CreateAsync(dto);
             return Ok("employee created successfully");

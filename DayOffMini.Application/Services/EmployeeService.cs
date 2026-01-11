@@ -24,9 +24,9 @@ namespace DayOffMini.Application.Services
             _leaveTypesGenericRepository = leaveTypesGenericRepository;
             _leaveBalanceGenericRepository = leaveBalanceGenericRepository;
         }
-        public async Task CreateAsync(EmployeeDto employeeDto)
+        public async Task CreateAsync(CreateEmployeeDto dto)
         {
-            var employee = _mapper.Map<Employee>(employeeDto);
+            var employee = _mapper.Map<Employee>(dto);
             await _genericRepository.CreateAsync(employee);
 
             #region Create Leave Balanaces

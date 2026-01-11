@@ -9,6 +9,9 @@ namespace DayOffMini.Application.MappingProfiles
         public EmployeeMappingProfile()
         {
             CreateMap<Employee, EmployeeDto>().ReverseMap();
+
+            CreateMap<Employee, CreateEmployeeDto>().ReverseMap();
+
         }
     }
 }
