@@ -1,57 +1,85 @@
-﻿using DayOffMini.Application.DTOs;
-using DayOffMini.Application.Mapping.Interfaces;
-using DayOffMini.Application.Services.Interfaces;
+﻿using AutoMapper;
+using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.DTOs.CreateRequests;
+using DayOffMini.Domain.DTOs.UpdateRequests;
 using DayOffMini.Domain.Interfaces;
-using DayOffMini.Domain.Interfaces.Repositories;
+using DayOffMini.Domain.Interfaces.IServices;
+using DayOffMini.Domain.Models;
 
 namespace DayOffMini.Application.Services
 {
     public class EmployeeService : IEmployeeService
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IGenericRepository<Employee> _genericRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IEmployeeMapper _mapper;
+        private readonly IMapper _mapper;
+        private readonly IGenericRepository<LeaveType> _leaveTypesGenericRepository;
+        private readonly IGenericRepository<LeaveBalance> _leaveBalanceGenericRepository;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IUnitOfWork unitOfWork, IEmployeeMapper mapper)
+        public EmployeeService(IGenericRepository<Employee> genericRepository, IUnitOfWork unitOfWork, IMapper mapper,
+            IGenericRepository<LeaveType> leaveTypesGenericRepository,
+            IGenericRepository<LeaveBalance> leaveBalanceGenericRepository)
         {
-            _employeeRepository = employeeRepository;
+            _genericRepository = genericRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _leaveTypesGenericRepository = leaveTypesGenericRepository;
+            _leaveBalanceGenericRepository = leaveBalanceGenericRepository;
         }
-        public async Task CreateAsync(EmployeeDto employeeDto)
+        public async Task CreateAsync(CreateEmployeeDto dto)
         {
-            var employee = _mapper.ToEntity(employeeDto);
-            await _employeeRepository.CreateAsync(employee);
+            Employee employee = _mapper.Map<Employee>(dto);
+            await _genericRepository.CreateAsync(employee);
+
+            #region Create Leave Balanaces
+            ICollection<LeaveType> leaveTypes = await _leaveTypesGenericRepository
+                   .GetAllAsync(l => l.IsDefault);
+
+            foreach (LeaveType leaveType in leaveTypes)
+            {
+                LeaveBalance leaveBalance = new LeaveBalance
+                {
+                    Employee = employee, // let EF handle FK
+                    LeaveTypeId = leaveType.Id,
+                    DaysOffRemaining = leaveType.DaysOffBalance!.Value
+                };
+
+                await _leaveBalanceGenericRepository.CreateAsync(leaveBalance);
+            }
+            #endregion
+
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(EmployeeDto employeeDto)
+        public async Task UpdateAsync(int id, UpdateEmployeeDto dto)
         {
-            var employee = _mapper.ToEntity(employeeDto);
-            await _employeeRepository.UpdateAsync(employee);
+            Employee employee = await _genericRepository.GetByIdAsync(id)
+                ?? throw new KeyNotFoundException($"Employee with ID {id} not found");
+
+            _mapper.Map(dto, employee);
             await _unitOfWork.SaveChangesAsync();
         }
+
 
         async Task<EmployeeDto?> IEmployeeService.GetByIdAsync(int entityId)
         {
-            var employee = await _employeeRepository.GetByIdAsync(entityId);
-            if (employee == null)
-                return null;
-            var employeeDto = _mapper.ToDto(employee);
+            Employee? employee = await _genericRepository.GetByIdAsync(entityId);
+            EmployeeDto employeeDto = _mapper.Map<EmployeeDto>(employee);
             return employeeDto;
         }
 
         public async Task<ICollection<EmployeeDto>> GetAllAsync()
         {
-            var employees = await _employeeRepository.GetAllAsync();
-            return employees
-                .Select(employee => _mapper.ToDto(employee))
-                .ToList();
+            ICollection<Employee> employees = await _genericRepository.GetAllAsync();
+            return _mapper.Map<ICollection<EmployeeDto>>(employees);
         }
 
-        public async Task DeleteAsync(int employeeId)
+        public async Task DeleteAsync(int id)
         {
-            await _employeeRepository.DeleteAsync(employeeId);
+            Employee employee = await _genericRepository.GetByIdAsync(id)
+                ?? throw new KeyNotFoundException($"Employee with ID {id} not found");
+
+            _genericRepository.Delete(employee);
             await _unitOfWork.SaveChangesAsync();
         }
     }

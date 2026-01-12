@@ -22,7 +22,7 @@ namespace DayOffMini.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("DayOffMini.Data.Models.Employee", b =>
+            modelBuilder.Entity("DayOffMini.Domain.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,7 @@ namespace DayOffMini.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("DayOffMini.Data.Models.LeaveBalance", b =>
+            modelBuilder.Entity("DayOffMini.Domain.Models.LeaveBalance", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,13 +53,13 @@ namespace DayOffMini.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<decimal>("DaysOffRemaining")
+                        .HasColumnType("decimal(5,2)");
+
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<int>("LeaveTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalDaysRemaining")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -71,7 +71,7 @@ namespace DayOffMini.Migrations
                     b.ToTable("LeaveBalances");
                 });
 
-            modelBuilder.Entity("DayOffMini.Data.Models.LeaveRequest", b =>
+            modelBuilder.Entity("DayOffMini.Domain.Models.LeaveRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace DayOffMini.Migrations
                     b.ToTable("LeaveRequests");
                 });
 
-            modelBuilder.Entity("DayOffMini.Data.Models.LeaveRequestStatus", b =>
+            modelBuilder.Entity("DayOffMini.Domain.Models.LeaveRequestStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -123,15 +123,38 @@ namespace DayOffMini.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LeaveRequestStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Pending"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Approved"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Rejected"
+                        });
                 });
 
-            modelBuilder.Entity("DayOffMini.Data.Models.LeaveType", b =>
+            modelBuilder.Entity("DayOffMini.Domain.Models.LeaveType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal?>("DaysOffBalance")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -140,20 +163,36 @@ namespace DayOffMini.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LeaveTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DaysOffBalance = 14m,
+                            IsDefault = true,
+                            Name = "Schedual"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DaysOffBalance = 7m,
+                            IsDefault = true,
+                            Name = "Casual"
+                        });
                 });
 
-            modelBuilder.Entity("DayOffMini.Data.Models.LeaveBalance", b =>
+            modelBuilder.Entity("DayOffMini.Domain.Models.LeaveBalance", b =>
                 {
-                    b.HasOne("DayOffMini.Data.Models.Employee", "Employee")
+                    b.HasOne("DayOffMini.Domain.Models.Employee", "Employee")
                         .WithMany("LeaveBalances")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DayOffMini.Data.Models.LeaveType", "LeaveType")
+                    b.HasOne("DayOffMini.Domain.Models.LeaveType", "LeaveType")
                         .WithMany("LeaveBalances")
                         .HasForeignKey("LeaveTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -161,24 +200,24 @@ namespace DayOffMini.Migrations
                     b.Navigation("LeaveType");
                 });
 
-            modelBuilder.Entity("DayOffMini.Data.Models.LeaveRequest", b =>
+            modelBuilder.Entity("DayOffMini.Domain.Models.LeaveRequest", b =>
                 {
-                    b.HasOne("DayOffMini.Data.Models.Employee", "Employee")
+                    b.HasOne("DayOffMini.Domain.Models.Employee", "Employee")
                         .WithMany("LeaveRequests")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DayOffMini.Data.Models.LeaveRequestStatus", "LeaveRequestStatus")
+                    b.HasOne("DayOffMini.Domain.Models.LeaveRequestStatus", "LeaveRequestStatus")
                         .WithMany("LeaveRequests")
                         .HasForeignKey("LeaveRequestStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DayOffMini.Data.Models.LeaveType", "LeaveType")
+                    b.HasOne("DayOffMini.Domain.Models.LeaveType", "LeaveType")
                         .WithMany("LeaveRequests")
                         .HasForeignKey("LeaveTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -188,19 +227,19 @@ namespace DayOffMini.Migrations
                     b.Navigation("LeaveType");
                 });
 
-            modelBuilder.Entity("DayOffMini.Data.Models.Employee", b =>
+            modelBuilder.Entity("DayOffMini.Domain.Models.Employee", b =>
                 {
                     b.Navigation("LeaveBalances");
 
                     b.Navigation("LeaveRequests");
                 });
 
-            modelBuilder.Entity("DayOffMini.Data.Models.LeaveRequestStatus", b =>
+            modelBuilder.Entity("DayOffMini.Domain.Models.LeaveRequestStatus", b =>
                 {
                     b.Navigation("LeaveRequests");
                 });
 
-            modelBuilder.Entity("DayOffMini.Data.Models.LeaveType", b =>
+            modelBuilder.Entity("DayOffMini.Domain.Models.LeaveType", b =>
                 {
                     b.Navigation("LeaveBalances");
 

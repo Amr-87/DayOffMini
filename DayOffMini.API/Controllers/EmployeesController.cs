@@ -1,5 +1,7 @@
-﻿using DayOffMini.Application.DTOs;
-using DayOffMini.Application.Services.Interfaces;
+﻿using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.DTOs.CreateRequests;
+using DayOffMini.Domain.DTOs.UpdateRequests;
+using DayOffMini.Domain.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DayOffMini.API.Controllers
@@ -9,73 +11,101 @@ namespace DayOffMini.API.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
+        private readonly ILeaveBalanceService _leaveBalanceService;
+        private readonly ILeaveRequestService _leaveRequestService;
 
-        public EmployeesController(IEmployeeService employeeService)
+        public EmployeesController(IEmployeeService employeeService, ILeaveBalanceService leaveBalanceService, ILeaveRequestService leaveRequestService)
         {
             _employeeService = employeeService;
+            _leaveBalanceService = leaveBalanceService;
+            _leaveRequestService = leaveRequestService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateEmployeeDto dto)
         {
-            try
-            {
-                await _employeeService.CreateAsync(dto);
-                return Ok("employee created successfully");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
+            await _employeeService.CreateAsync(dto);
+            return Created();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateEmployee([FromBody] EmployeeDto dto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateEmployeeDto dto)
         {
-            try
-            {
-                await _employeeService.UpdateAsync(dto);
-                return Ok("employee updated successfully");
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            await _employeeService.UpdateAsync(id, dto);
+            return NoContent();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetEmployeeById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var employeeDto = await _employeeService.GetByIdAsync(id);
+            EmployeeDto? employeeDto = await _employeeService.GetByIdAsync(id);
             if (employeeDto == null)
-                return NotFound();
+            {
+                return NotFound("employee not found");
+            }
             return Ok(employeeDto);
         }
-
         [HttpGet]
-        public async Task<IActionResult> GetAllEmployees()
+        public async Task<IActionResult> GetAll()
         {
-            var employeesDto = await _employeeService.GetAllAsync();
-            return Ok(employeesDto);
+            ICollection<EmployeeDto> dtos = await _employeeService.GetAllAsync();
+            return Ok(dtos);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteEmployee(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _employeeService.DeleteAsync(id);
-                return Ok("employee deleted successfully");
-            }
-            catch (KeyNotFoundException)
-            {
-                return BadRequest();
-            }
-
+            await _employeeService.DeleteAsync(id);
+            return NoContent();
         }
+
+        #region Leave Balances
+        [HttpGet("{employeeId}/LeaveBalances")]
+        public async Task<IActionResult> GetEmployeeLeaveBalances(int employeeId)
+        {
+            ICollection<LeaveBalanceDto> dtos = await _leaveBalanceService.GetEmployeeLeaveBalancesAsync(employeeId);
+            if (!dtos.Any())
+                return NoContent();
+
+            return Ok(dtos);
+        }
+
+        [HttpPut("{employeeId}/LeaveBalances/{leaveBalanceId}")]
+        public async Task<IActionResult> UpdateEmployeeLeaveBalance(int employeeId, int leaveBalanceId, [FromBody] UpdateLeaveBalanceDto dto)
+        {
+            await _leaveBalanceService.UpdateEmployeeLeaveBalanceAsync(employeeId, leaveBalanceId, dto);
+            return NoContent();
+        }
+        #endregion
+
+        #region Leave Requests
+        [HttpPost("{employeeId}/LeaveRequests")]
+        public async Task<IActionResult> CreateLeaveRequest(int employeeId, [FromBody] CreateLeaveRequestDto dto)
+        {
+            await _leaveRequestService.CreateAsync(employeeId, dto);
+            return Created();
+        }
+
+        [HttpGet("{employeeId}/LeaveRequests")]
+        public async Task<IActionResult> GetEmployeeLeaveRequests(int employeeId)
+        {
+            ICollection<LeaveRequestDto> dtos = await _leaveRequestService.GetEmployeeLeaveRequestsAsync(employeeId);
+            return Ok(dtos);
+        }
+
+        [HttpPut("{employeeId}/LeaveRequests/{leaveRequestId}")]
+        public async Task<IActionResult> UpdateEmployeeLeaveRequest(int employeeId, int leaveRequestId, [FromBody] UpdateLeaveRequestDto dto)
+        {
+            await _leaveRequestService.UpdateEmployeeLeaveRequestAsync(employeeId, leaveRequestId, dto);
+            return NoContent();
+        }
+
+        [HttpDelete("{employeeId}/LeaveRequests/{leaveRequestId}")]
+        public async Task<IActionResult> DeleteEmployeeLeaveRequest(int employeeId, int leaveRequestId)
+        {
+            await _leaveRequestService.DeleteAsync(employeeId, leaveRequestId);
+            return NoContent();
+        }
+        #endregion
     }
 }
