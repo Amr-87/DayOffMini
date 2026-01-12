@@ -28,16 +28,16 @@ namespace DayOffMini.Application.Services
         }
         public async Task CreateAsync(CreateEmployeeDto dto)
         {
-            var employee = _mapper.Map<Employee>(dto);
+            Employee employee = _mapper.Map<Employee>(dto);
             await _genericRepository.CreateAsync(employee);
 
             #region Create Leave Balanaces
-            var leaveTypes = await _leaveTypesGenericRepository
+            ICollection<LeaveType> leaveTypes = await _leaveTypesGenericRepository
                    .GetAllAsync(l => l.IsDefault);
 
-            foreach (var leaveType in leaveTypes)
+            foreach (LeaveType leaveType in leaveTypes)
             {
-                var leaveBalance = new LeaveBalance
+                LeaveBalance leaveBalance = new LeaveBalance
                 {
                     Employee = employee, // let EF handle FK
                     LeaveTypeId = leaveType.Id,
@@ -53,7 +53,7 @@ namespace DayOffMini.Application.Services
 
         public async Task UpdateAsync(int id, UpdateEmployeeDto dto)
         {
-            var employee = await _genericRepository.GetByIdAsync(id)
+            Employee employee = await _genericRepository.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException($"Employee with ID {id} not found");
 
             _mapper.Map(dto, employee);
@@ -63,20 +63,20 @@ namespace DayOffMini.Application.Services
 
         async Task<EmployeeDto?> IEmployeeService.GetByIdAsync(int entityId)
         {
-            var employee = await _genericRepository.GetByIdAsync(entityId);
-            var employeeDto = _mapper.Map<EmployeeDto>(employee);
+            Employee? employee = await _genericRepository.GetByIdAsync(entityId);
+            EmployeeDto employeeDto = _mapper.Map<EmployeeDto>(employee);
             return employeeDto;
         }
 
         public async Task<ICollection<EmployeeDto>> GetAllAsync()
         {
-            var employees = await _genericRepository.GetAllAsync();
+            ICollection<Employee> employees = await _genericRepository.GetAllAsync();
             return _mapper.Map<ICollection<EmployeeDto>>(employees);
         }
 
         public async Task DeleteAsync(int id)
         {
-            var employee = await _genericRepository.GetByIdAsync(id)
+            Employee employee = await _genericRepository.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException($"Employee with ID {id} not found");
 
             _genericRepository.Delete(employee);

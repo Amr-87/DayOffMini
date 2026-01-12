@@ -33,7 +33,7 @@ namespace DayOffMini.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var dto = await _leaveTypeService.GetByIdAsync(id);
+            LeaveTypeDto? dto = await _leaveTypeService.GetByIdAsync(id);
             if (dto == null)
             {
                 return NotFound("leave type not found");
@@ -44,7 +44,7 @@ namespace DayOffMini.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var dtos = await _leaveTypeService.GetAllAsync();
+            ICollection<LeaveTypeDto> dtos = await _leaveTypeService.GetAllAsync();
             return Ok(dtos);
         }
     }

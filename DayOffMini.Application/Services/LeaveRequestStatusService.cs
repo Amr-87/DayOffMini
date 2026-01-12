@@ -19,14 +19,14 @@ namespace DayOffMini.Application.Services
 
         public async Task<ICollection<LeaveRequestStatusDto>> GetAllAsync()
         {
-            var leaveRequestStatuses = await _genericRepository.GetAllAsync();
+            ICollection<LeaveRequestStatus> leaveRequestStatuses = await _genericRepository.GetAllAsync();
             return _mapper.Map<ICollection<LeaveRequestStatusDto>>(leaveRequestStatuses);
         }
 
         public async Task<LeaveRequestStatusDto?> GetByIdAsync(int id)
         {
-            var leaveRequestStatus = await _genericRepository.GetByIdAsync(id);
-            var dto = _mapper.Map<LeaveRequestStatusDto>(leaveRequestStatus);
+            LeaveRequestStatus? leaveRequestStatus = await _genericRepository.GetByIdAsync(id);
+            LeaveRequestStatusDto dto = _mapper.Map<LeaveRequestStatusDto>(leaveRequestStatus);
             return dto;
         }
     }

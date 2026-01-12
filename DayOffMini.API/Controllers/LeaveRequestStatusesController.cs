@@ -1,4 +1,5 @@
-﻿using DayOffMini.Domain.Interfaces.IServices;
+﻿using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DayOffMini.API.Controllers
@@ -17,7 +18,7 @@ namespace DayOffMini.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var dto = await _leaveRequestStatusService.GetByIdAsync(id);
+            LeaveRequestStatusDto? dto = await _leaveRequestStatusService.GetByIdAsync(id);
             if (dto == null)
             {
                 return NotFound("leave request status not found");
@@ -28,7 +29,7 @@ namespace DayOffMini.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var dtos = await _leaveRequestStatusService.GetAllAsync();
+            ICollection<LeaveRequestStatusDto> dtos = await _leaveRequestStatusService.GetAllAsync();
             return Ok(dtos);
         }
     }

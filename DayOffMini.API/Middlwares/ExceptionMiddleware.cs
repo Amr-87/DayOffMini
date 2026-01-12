@@ -39,7 +39,7 @@ public class ExceptionMiddleware
     {
         context.Response.ContentType = "application/json";
 
-        var response = new
+        object response = new
         {
             error = message
         };

@@ -21,27 +21,27 @@ namespace DayOffMini.Application.Services
         }
         public async Task CreateAsync(LeaveTypeDto leaveTypeDto)
         {
-            var leaveType = _mapper.Map<LeaveType>(leaveTypeDto);
+            LeaveType leaveType = _mapper.Map<LeaveType>(leaveTypeDto);
             await _genericRepository.CreateAsync(leaveType);
             await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<ICollection<LeaveTypeDto>> GetAllAsync()
         {
-            var leaveTypes = await _genericRepository.GetAllAsync();
+            ICollection<LeaveType> leaveTypes = await _genericRepository.GetAllAsync();
             return _mapper.Map<ICollection<LeaveTypeDto>>(leaveTypes);
         }
 
         public async Task<LeaveTypeDto?> GetByIdAsync(int leaveTypeId)
         {
-            var leaveType = await _genericRepository.GetByIdAsync(leaveTypeId);
-            var leaveTypeDto = _mapper.Map<LeaveTypeDto>(leaveType);
+            LeaveType? leaveType = await _genericRepository.GetByIdAsync(leaveTypeId);
+            LeaveTypeDto leaveTypeDto = _mapper.Map<LeaveTypeDto>(leaveType);
             return leaveTypeDto;
         }
 
         public async Task UpdateAsync(int id, UpdateLeaveTypeDto leaveTypeDto)
         {
-            var leaveType = await _genericRepository.GetByIdAsync(id)
+            LeaveType leaveType = await _genericRepository.GetByIdAsync(id)
              ?? throw new KeyNotFoundException($"Leave Type with ID {id} not found");
 
             _mapper.Map(leaveTypeDto, leaveType);

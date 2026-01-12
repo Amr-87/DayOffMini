@@ -22,14 +22,14 @@ namespace DayOffMini.Application.Services
 
         public async Task<ICollection<LeaveBalanceDto>> GetEmployeeLeaveBalancesAsync(int employeeId)
         {
-            var leaveBalances = await _genericRepository.GetAllAsync(b => b.EmployeeId == employeeId,
+            ICollection<LeaveBalance> leaveBalances = await _genericRepository.GetAllAsync(b => b.EmployeeId == employeeId,
                 e => e.Id, true, b => b.Employee, b => b.LeaveType);
             return _mapper.Map<ICollection<LeaveBalanceDto>>(leaveBalances);
         }
 
         public async Task UpdateEmployeeLeaveBalanceAsync(int employeeId, int leaveBalanceId, UpdateLeaveBalanceDto dto)
         {
-            var leaveBalance = await _genericRepository.GetByIdAsync(leaveBalanceId)
+            LeaveBalance leaveBalance = await _genericRepository.GetByIdAsync(leaveBalanceId)
              ?? throw new KeyNotFoundException($"Leave Balance with ID {leaveBalanceId} not found");
 
             if (leaveBalance.EmployeeId != employeeId)

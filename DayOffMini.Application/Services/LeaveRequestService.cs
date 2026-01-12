@@ -24,7 +24,7 @@ namespace DayOffMini.Application.Services
         {
             int pendingLeaveRequestStatusId = 1;
 
-            var leaveRequest = _mapper.Map<LeaveRequest>(dto);
+            LeaveRequest leaveRequest = _mapper.Map<LeaveRequest>(dto);
 
             leaveRequest.LeaveRequestStatusId = pendingLeaveRequestStatusId;
             leaveRequest.EmployeeId = employeeId;
@@ -35,7 +35,7 @@ namespace DayOffMini.Application.Services
 
         public async Task DeleteAsync(int employeeId, int leaveRequestId)
         {
-            var leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId)
+            LeaveRequest leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId)
                 ?? throw new KeyNotFoundException($"Leave request with ID {leaveRequestId} not found");
 
             if (leaveRequest.EmployeeId != employeeId)
@@ -47,14 +47,14 @@ namespace DayOffMini.Application.Services
 
         public async Task<LeaveRequestDto?> GetByIdAsync(int leaveRequestId)
         {
-            var leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId, b => b.Employee, b => b.LeaveType, b => b.LeaveRequestStatus);
-            var leaveRequestDto = _mapper.Map<LeaveRequestDto>(leaveRequest);
+            LeaveRequest? leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId, b => b.Employee, b => b.LeaveType, b => b.LeaveRequestStatus);
+            LeaveRequestDto leaveRequestDto = _mapper.Map<LeaveRequestDto>(leaveRequest);
             return leaveRequestDto;
         }
 
         public async Task<ICollection<LeaveRequestDto>> GetEmployeeLeaveRequestsAsync(int employeeId)
         {
-            var leaveRequests = await _genericRepository
+            ICollection<LeaveRequest> leaveRequests = await _genericRepository
                            .GetAllAsync(f => f.EmployeeId == employeeId,
                            a => a.Id, true, b => b.Employee, b => b.LeaveType, b => b.LeaveRequestStatus);
             return _mapper.Map<ICollection<LeaveRequestDto>>(leaveRequests);
@@ -62,7 +62,7 @@ namespace DayOffMini.Application.Services
 
         public async Task UpdateEmployeeLeaveRequestAsync(int employeeId, int leaveRequestId, UpdateLeaveRequestDto dto)
         {
-            var leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId)
+            LeaveRequest leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId)
                       ?? throw new KeyNotFoundException($"Leave Request with ID {leaveRequestId} not found");
 
             if (leaveRequest.EmployeeId != employeeId)

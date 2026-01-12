@@ -1,4 +1,5 @@
-﻿using DayOffMini.Domain.DTOs.CreateRequests;
+﻿using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.DTOs.CreateRequests;
 using DayOffMini.Domain.DTOs.UpdateRequests;
 using DayOffMini.Domain.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,7 @@ namespace DayOffMini.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var employeeDto = await _employeeService.GetByIdAsync(id);
+            EmployeeDto? employeeDto = await _employeeService.GetByIdAsync(id);
             if (employeeDto == null)
             {
                 return NotFound("employee not found");
@@ -47,7 +48,7 @@ namespace DayOffMini.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var dtos = await _employeeService.GetAllAsync();
+            ICollection<EmployeeDto> dtos = await _employeeService.GetAllAsync();
             return Ok(dtos);
         }
 
@@ -62,7 +63,7 @@ namespace DayOffMini.API.Controllers
         [HttpGet("{employeeId}/LeaveBalances")]
         public async Task<IActionResult> GetEmployeeLeaveBalances(int employeeId)
         {
-            var dtos = await _leaveBalanceService.GetEmployeeLeaveBalancesAsync(employeeId);
+            ICollection<LeaveBalanceDto> dtos = await _leaveBalanceService.GetEmployeeLeaveBalancesAsync(employeeId);
             if (!dtos.Any())
                 return NoContent();
 
@@ -88,7 +89,7 @@ namespace DayOffMini.API.Controllers
         [HttpGet("{employeeId}/LeaveRequests")]
         public async Task<IActionResult> GetEmployeeLeaveRequests(int employeeId)
         {
-            var dtos = await _leaveRequestService.GetEmployeeLeaveRequestsAsync(employeeId);
+            ICollection<LeaveRequestDto> dtos = await _leaveRequestService.GetEmployeeLeaveRequestsAsync(employeeId);
             return Ok(dtos);
         }
 
