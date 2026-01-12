@@ -6,7 +6,7 @@ namespace DayOffMini.Domain.Interfaces.IServices
 {
     public interface ILeaveRequestService
     {
-        Task CreateAsync(CreateLeaveRequestDto dto);
+        Task CreateAsync(int employeeId, CreateLeaveRequestDto dto);
         Task<LeaveRequestDto?> GetByIdAsync(int leaveRequestId);
         Task DeleteAsync(int employeeId, int leaveRequestId);
         Task<ICollection<LeaveRequestDto>> GetEmployeeLeaveRequestsAsync(int employeeId);

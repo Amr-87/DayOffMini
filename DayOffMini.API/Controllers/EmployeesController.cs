@@ -78,10 +78,10 @@ namespace DayOffMini.API.Controllers
         #endregion
 
         #region Leave Requests
-        [HttpPost("LeaveRequests")]
-        public async Task<IActionResult> CreateLeaveRequest([FromBody] CreateLeaveRequestDto dto)
+        [HttpPost("{employeeId}/LeaveRequests")]
+        public async Task<IActionResult> CreateLeaveRequest(int employeeId, [FromBody] CreateLeaveRequestDto dto)
         {
-            await _leaveRequestService.CreateAsync(dto);
+            await _leaveRequestService.CreateAsync(employeeId, dto);
             return Created();
         }
 

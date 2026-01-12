@@ -2,7 +2,6 @@
 {
     public class CreateLeaveRequestDto
     {
-        public int EmployeeId { get; set; }
         public int LeaveTypeId { get; set; }
 
         public DateTime StartDate { get; set; }

@@ -20,13 +20,14 @@ namespace DayOffMini.Application.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task CreateAsync(CreateLeaveRequestDto dto)
+        public async Task CreateAsync(int employeeId, CreateLeaveRequestDto dto)
         {
             int pendingLeaveRequestStatusId = 1;
 
             var leaveRequest = _mapper.Map<LeaveRequest>(dto);
 
             leaveRequest.LeaveRequestStatusId = pendingLeaveRequestStatusId;
+            leaveRequest.EmployeeId = employeeId;
 
             await _genericRepository.CreateAsync(leaveRequest);
             await _unitOfWork.SaveChangesAsync();
