@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.DTOs.UpdateRequests;
 using DayOffMini.Domain.Interfaces;
 using DayOffMini.Domain.Interfaces.IServices;
 using DayOffMini.Domain.Models;
@@ -18,37 +19,25 @@ namespace DayOffMini.Application.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task CreateAsync(LeaveBalanceDto dto)
-        {
-            var leaveBalance = _mapper.Map<LeaveBalance>(dto);
-            await _genericRepository.CreateAsync(leaveBalance);
-            await _unitOfWork.SaveChangesAsync();
-        }
 
-        public async Task DeleteAsync(LeaveBalanceDto dto)
+        public async Task<ICollection<LeaveBalanceDto>> GetEmployeeLeaveBalancesAsync(int employeeId)
         {
-            var leaveBalance = _mapper.Map<LeaveBalance>(dto);
-            _genericRepository.Delete(leaveBalance);
-            await _unitOfWork.SaveChangesAsync();
-        }
-
-        public async Task<ICollection<LeaveBalanceDto>> GetAllAsync()
-        {
-            var leaveBalances = await _genericRepository.GetAllAsync(null, e => e.Id, true, b => b.Employee, b => b.LeaveType);
+            var leaveBalances = await _genericRepository.GetAllAsync(b => b.EmployeeId == employeeId,
+                e => e.Id, true, b => b.Employee, b => b.LeaveType);
             return _mapper.Map<ICollection<LeaveBalanceDto>>(leaveBalances);
         }
 
-        public async Task<LeaveBalanceDto?> GetByIdAsync(int employeeId)
+        public async Task UpdateEmployeeLeaveBalanceAsync(int employeeId, int leaveBalanceId, UpdateLeaveBalanceDto dto)
         {
-            var leaveBalance = await _genericRepository.GetByIdAsync(employeeId, b => b.Employee, b => b.LeaveType);
-            var dto = _mapper.Map<LeaveBalanceDto>(leaveBalance);
-            return dto;
-        }
+            var leaveBalance = await _genericRepository.GetByIdAsync(leaveBalanceId)
+             ?? throw new KeyNotFoundException($"Leave Balance with ID {leaveBalanceId} not found");
 
-        public async Task UpdateAsync(LeaveBalanceDto dto)
-        {
-            var updatedLeaveBalance = _mapper.Map<LeaveBalance>(dto);
-            _genericRepository.Update(updatedLeaveBalance);
+            if (leaveBalance.EmployeeId != employeeId)
+            {
+                throw new InvalidOperationException($"Leave Balance with ID {leaveBalanceId} does not belong to Employee with ID {employeeId}");
+            }
+
+            _mapper.Map(dto, leaveBalance);
             await _unitOfWork.SaveChangesAsync();
         }
     }

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.DTOs.CreateRequests;
+using DayOffMini.Domain.DTOs.UpdateRequests;
 using DayOffMini.Domain.Interfaces;
 using DayOffMini.Domain.Interfaces.IServices;
 using DayOffMini.Domain.Models;
@@ -54,10 +56,7 @@ namespace DayOffMini.Application.Services
             var employee = await _genericRepository.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException($"Employee with ID {id} not found");
 
-            // Map only updated fields onto tracked entity
             _mapper.Map(dto, employee);
-
-            // No Update() call needed – entity is tracked
             await _unitOfWork.SaveChangesAsync();
         }
 
@@ -75,9 +74,11 @@ namespace DayOffMini.Application.Services
             return _mapper.Map<ICollection<EmployeeDto>>(employees);
         }
 
-        public async Task DeleteAsync(EmployeeDto dto)
+        public async Task DeleteAsync(int id)
         {
-            var employee = _mapper.Map<Employee>(dto);
+            var employee = await _genericRepository.GetByIdAsync(id)
+                ?? throw new KeyNotFoundException($"Employee with ID {id} not found");
+
             _genericRepository.Delete(employee);
             await _unitOfWork.SaveChangesAsync();
         }

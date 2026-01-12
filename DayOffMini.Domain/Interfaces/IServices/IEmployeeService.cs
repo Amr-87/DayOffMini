@@ -1,4 +1,6 @@
 ﻿using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.DTOs.CreateRequests;
+using DayOffMini.Domain.DTOs.UpdateRequests;
 
 namespace DayOffMini.Domain.Interfaces.IServices
 {
@@ -8,6 +10,6 @@ namespace DayOffMini.Domain.Interfaces.IServices
         Task UpdateAsync(int id, UpdateEmployeeDto updateDto);
         Task<EmployeeDto?> GetByIdAsync(int employeeId);
         Task<ICollection<EmployeeDto>> GetAllAsync();
-        Task DeleteAsync(EmployeeDto employeeDto);
+        Task DeleteAsync(int employeeId);
     }
 }

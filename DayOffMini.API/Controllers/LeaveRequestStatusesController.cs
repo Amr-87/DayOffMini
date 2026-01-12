@@ -29,9 +29,6 @@ namespace DayOffMini.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var dtos = await _leaveRequestStatusService.GetAllAsync();
-            if (!dtos.Any())
-                return NoContent();
-
             return Ok(dtos);
         }
     }

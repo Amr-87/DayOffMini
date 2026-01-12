@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text.Json;
 
 namespace DayOffMini.API.Middlwares;
 
@@ -20,12 +21,29 @@ public class ExceptionMiddleware
         catch (KeyNotFoundException ex)
         {
             context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            await context.Response.WriteAsync(ex.Message);
+            await WriteErrorAsync(context, ex.Message);
         }
-        catch (Exception ex)
+        catch (InvalidOperationException ex)
         {
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            await context.Response.WriteAsync($"An error occurred, {ex.InnerException!.Message}");
+            context.Response.StatusCode = (int)HttpStatusCode.Conflict; // 409
+            await WriteErrorAsync(context, ex.Message);
         }
+        catch (Exception)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            await WriteErrorAsync(context, "An unexpected error occurred.");
+        }
+    }
+
+    private static async Task WriteErrorAsync(HttpContext context, string message)
+    {
+        context.Response.ContentType = "application/json";
+
+        var response = new
+        {
+            error = message
+        };
+
+        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
 }

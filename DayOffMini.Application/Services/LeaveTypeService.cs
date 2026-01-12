@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.DTOs.UpdateRequests;
 using DayOffMini.Domain.Interfaces;
 using DayOffMini.Domain.Interfaces.IServices;
 using DayOffMini.Domain.Models;
@@ -38,10 +39,12 @@ namespace DayOffMini.Application.Services
             return leaveTypeDto;
         }
 
-        public async Task UpdateAsync(LeaveTypeDto leaveTypeDto)
+        public async Task UpdateAsync(int id, UpdateLeaveTypeDto leaveTypeDto)
         {
-            var updatedLeaveType = _mapper.Map<LeaveType>(leaveTypeDto);
-            _genericRepository.Update(updatedLeaveType);
+            var leaveType = await _genericRepository.GetByIdAsync(id)
+             ?? throw new KeyNotFoundException($"Leave Type with ID {id} not found");
+
+            _mapper.Map(leaveTypeDto, leaveType);
             await _unitOfWork.SaveChangesAsync();
         }
     }

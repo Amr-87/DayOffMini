@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.DTOs.CreateRequests;
+using DayOffMini.Domain.DTOs.UpdateRequests;
 using DayOffMini.Domain.Interfaces;
 using DayOffMini.Domain.Interfaces.IServices;
 using DayOffMini.Domain.Models;
@@ -30,18 +32,16 @@ namespace DayOffMini.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(LeaveRequestDto dto)
+        public async Task DeleteAsync(int employeeId, int leaveRequestId)
         {
-            var leaveRequest = _mapper.Map<LeaveRequest>(dto);
+            var leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId)
+                ?? throw new KeyNotFoundException($"Leave request with ID {leaveRequestId} not found");
+
+            if (leaveRequest.EmployeeId != employeeId)
+                throw new InvalidOperationException("Leave request does not belong to the specified employee");
+
             _genericRepository.Delete(leaveRequest);
             await _unitOfWork.SaveChangesAsync();
-        }
-
-        public async Task<ICollection<LeaveRequestDto>> GetAllAsync()
-        {
-            var leaveRequests = await _genericRepository
-                .GetAllAsync(null, a => a.Id, true, b => b.Employee, b => b.LeaveType, b => b.LeaveRequestStatus);
-            return _mapper.Map<ICollection<LeaveRequestDto>>(leaveRequests);
         }
 
         public async Task<LeaveRequestDto?> GetByIdAsync(int leaveRequestId)
@@ -51,11 +51,27 @@ namespace DayOffMini.Application.Services
             return leaveRequestDto;
         }
 
-        public async Task UpdateAsync(LeaveRequestDto dto)
+        public async Task<ICollection<LeaveRequestDto>> GetEmployeeLeaveRequestsAsync(int employeeId)
         {
-            var updatedLeaveRequest = _mapper.Map<LeaveRequest>(dto);
-            _genericRepository.Update(updatedLeaveRequest);
+            var leaveRequests = await _genericRepository
+                           .GetAllAsync(f => f.EmployeeId == employeeId,
+                           a => a.Id, true, b => b.Employee, b => b.LeaveType, b => b.LeaveRequestStatus);
+            return _mapper.Map<ICollection<LeaveRequestDto>>(leaveRequests);
+        }
+
+        public async Task UpdateEmployeeLeaveRequestAsync(int employeeId, int leaveRequestId, UpdateLeaveRequestDto dto)
+        {
+            var leaveRequest = await _genericRepository.GetByIdAsync(leaveRequestId)
+                      ?? throw new KeyNotFoundException($"Leave Request with ID {leaveRequestId} not found");
+
+            if (leaveRequest.EmployeeId != employeeId)
+            {
+                throw new InvalidOperationException($"Leave Request with ID {leaveRequestId} does not belong to Employee with ID {employeeId}");
+            }
+
+            _mapper.Map(dto, leaveRequest);
             await _unitOfWork.SaveChangesAsync();
         }
     }
 }
+

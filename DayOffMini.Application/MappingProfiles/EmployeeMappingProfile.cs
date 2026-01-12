@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.DTOs.CreateRequests;
+using DayOffMini.Domain.DTOs.UpdateRequests;
 using DayOffMini.Domain.Models;
 
 namespace DayOffMini.Application.MappingProfiles

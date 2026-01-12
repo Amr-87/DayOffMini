@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.DTOs.UpdateRequests;
 using DayOffMini.Domain.Models;
 
 namespace DayOffMini.Application.MappingProfiles
@@ -11,6 +12,8 @@ namespace DayOffMini.Application.MappingProfiles
             CreateMap<LeaveBalanceDto, LeaveBalance>().ReverseMap()
                 .ForMember(dest => dest.EmployeeName, op => op.MapFrom(src => src.Employee.Name))
                 .ForMember(dest => dest.LeaveTypeName, op => op.MapFrom(src => src.LeaveType.Name));
+
+            CreateMap<UpdateLeaveBalanceDto, LeaveBalance>().ReverseMap();
         }
     }
 }

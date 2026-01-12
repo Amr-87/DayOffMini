@@ -1,4 +1,5 @@
 ﻿using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.DTOs.UpdateRequests;
 using DayOffMini.Domain.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,19 +20,14 @@ namespace DayOffMini.API.Controllers
         public async Task<IActionResult> Create([FromBody] LeaveTypeDto dto)
         {
             await _leaveTypeService.CreateAsync(dto);
-            return Ok("leave type created successfully");
+            return Created();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] LeaveTypeDto dto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateLeaveTypeDto dto)
         {
-            var existingLeaveType = await _leaveTypeService.GetByIdAsync(dto.Id);
-            if (existingLeaveType == null)
-            {
-                return BadRequest("leave type not found");
-            }
-            await _leaveTypeService.UpdateAsync(dto);
-            return Ok("leave type updated successfully");
+            await _leaveTypeService.UpdateAsync(id, dto);
+            return NoContent();
         }
 
         [HttpGet("{id}")]
@@ -49,9 +45,6 @@ namespace DayOffMini.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var dtos = await _leaveTypeService.GetAllAsync();
-            if (!dtos.Any())
-                return NoContent();
-
             return Ok(dtos);
         }
     }

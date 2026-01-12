@@ -1,4 +1,4 @@
-﻿namespace DayOffMini.Domain.DTOs
+﻿namespace DayOffMini.Domain.DTOs.UpdateRequests
 {
     public class UpdateEmployeeDto
     {
