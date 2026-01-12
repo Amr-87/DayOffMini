@@ -26,16 +26,16 @@ namespace DayOffMini.Infrastructure.Repository.Repositories.Entities
                 .Select(g => new LeaveBalancesReportDto
                 {
                     EmployeeId = g.Key.EmployeeId,
-                    EmployeeName = g.Key.Name,
+                    EmployeeName = g.Key.Name!,
 
-                    TotalDaysOffRemaining = g.Sum(x => x.DaysOffRemaining),
+                    //TotalDaysOffRemaining = g.Sum(x => x.DaysOffRemaining),
                     TotalDaysOffBalance = g.Sum(x => x.LeaveType.DaysOffBalance ?? 0),
 
                     LeaveBalances = g.Select(x => new LeaveBalanceRowDto
                     {
                         LeaveTypeId = x.LeaveTypeId,
                         LeaveTypeName = x.LeaveType.Name,
-                        DaysOffRemaining = x.DaysOffRemaining,
+                        //DaysOffRemaining = x.DaysOffRemaining,
                         DaysOffBalance = x.LeaveType.DaysOffBalance ?? 0
                     }).ToList()
                 })
