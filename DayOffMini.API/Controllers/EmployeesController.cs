@@ -21,6 +21,7 @@ namespace DayOffMini.API.Controllers
             _leaveRequestService = leaveRequestService;
         }
 
+        #region Employees
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateEmployeeDto dto)
         {
@@ -58,6 +59,7 @@ namespace DayOffMini.API.Controllers
             await _employeeService.DeleteAsync(id);
             return NoContent();
         }
+        #endregion
 
         #region Leave Balances
         [HttpGet("{employeeId}/LeaveBalances")]
