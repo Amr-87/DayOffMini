@@ -12,14 +12,14 @@ namespace DayOffMini.Application.Services
     public class LeaveBalanceService : ILeaveBalanceService
     {
         private readonly IGenericRepository<LeaveBalance> _genericRepository;
-        private readonly ILeaveBalanceReportRepository _reportRepository;
+        private readonly ILeaveBalanceRepository _leaveBalanceRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public LeaveBalanceService(IGenericRepository<LeaveBalance> genericRepository, ILeaveBalanceReportRepository reportRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public LeaveBalanceService(IGenericRepository<LeaveBalance> genericRepository, ILeaveBalanceRepository leaveBalanceRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _genericRepository = genericRepository;
-            _reportRepository = reportRepository;
+            _leaveBalanceRepository = leaveBalanceRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -45,9 +45,33 @@ namespace DayOffMini.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
+
         public async Task<ICollection<LeaveBalancesReportDto>> GetLeaveBalancesReportAsync()
         {
-            return await _reportRepository.GetLeaveBalancesReportAsync();
+            // Get raw data from repository
+            ICollection<LeaveBalanceRawDto> rawData = await _leaveBalanceRepository.GetLeaveBalancesRawDataAsync();
+
+            // Transform and aggregate data (business logic)
+            ICollection<LeaveBalancesReportDto> report = rawData
+                .GroupBy(x => new { x.EmployeeId, x.EmployeeName })
+                .Select(empGroup => new LeaveBalancesReportDto
+                {
+                    EmployeeId = empGroup.Key.EmployeeId,
+                    EmployeeName = empGroup.Key.EmployeeName,
+                    LeaveBalances = empGroup.Select(x => new LeaveBalanceRowDto
+                    {
+                        LeaveTypeId = x.LeaveTypeId,
+                        LeaveTypeName = x.LeaveTypeName,
+                        FixedDaysOffBalance = x.FixedDaysOffBalance,
+                        DaysTaken = x.DaysTaken,
+                        DaysOffRemaining = x.FixedDaysOffBalance - x.DaysTaken
+                    }).ToList(),
+                    TotalDaysOffBalance = empGroup.Sum(x => x.FixedDaysOffBalance),
+                    TotalDaysOffRemaining = empGroup.Sum(x => x.FixedDaysOffBalance - x.DaysTaken)
+                })
+                .ToList();
+
+            return report;
         }
     }
 }
