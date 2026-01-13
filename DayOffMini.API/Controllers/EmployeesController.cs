@@ -1,5 +1,6 @@
 ﻿using DayOffMini.Domain.DTOs;
 using DayOffMini.Domain.DTOs.CreateRequests;
+using DayOffMini.Domain.DTOs.Reports;
 using DayOffMini.Domain.DTOs.UpdateRequests;
 using DayOffMini.Domain.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -109,5 +110,12 @@ namespace DayOffMini.API.Controllers
             return NoContent();
         }
         #endregion
+
+        [HttpGet("LeaveBalances/Report")]
+        public async Task<IActionResult> LeaveBalancesReport()
+        {
+            ICollection<LeaveBalancesReportDto> report = await _leaveBalanceService.GetLeaveBalancesReportAsync();
+            return Ok(report);
+        }
     }
 }

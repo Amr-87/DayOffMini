@@ -3,7 +3,7 @@ using DayOffMini.Domain.Models;
 using DayOffMini.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 
-namespace DayOffMini.Infrastructure.Repository.Repositories.Entities
+namespace DayOffMini.Infrastructure.Repository.Repositories
 {
     public class LeaveBalanceRepository : ILeaveBalanceRepository
     {

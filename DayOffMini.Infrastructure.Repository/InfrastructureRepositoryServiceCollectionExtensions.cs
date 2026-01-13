@@ -1,6 +1,6 @@
 ﻿using DayOffMini.Domain.Interfaces;
 using DayOffMini.Domain.Interfaces.IRepositories;
-using DayOffMini.Infrastructure.Repository.Repositories.Entities;
+using DayOffMini.Infrastructure.Repository.Repositories;
 using DayOffMini.Infrastructure.Repository.Repositories.Generic;
 using Microsoft.Extensions.DependencyInjection;
 
