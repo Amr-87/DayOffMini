@@ -15,8 +15,10 @@ namespace DayOffMini.Infrastructure.Repository.Repositories.Entities
         }
         public async Task<decimal> GetFixedDaysOffBalance(int employeeId, int leaveTypeId)
         {
-            LeaveBalance? leaveBalance = await _db.LeaveBalances.FirstOrDefaultAsync(b => b.EmployeeId == employeeId && b.LeaveTypeId == leaveTypeId);
-            return leaveBalance?.LeaveType.DaysOffBalance ?? 0;
+            LeaveBalance? leaveBalance = await _db.LeaveBalances
+                .FirstOrDefaultAsync(b => b.EmployeeId == employeeId && b.LeaveTypeId == leaveTypeId);
+
+            return leaveBalance?.FixedDaysOffBalance ?? 0;
         }
     }
 }

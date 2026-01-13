@@ -14,10 +14,9 @@ namespace DayOffMini.Infrastructure.Repository.Repositories.Entities
         }
         public async Task<decimal> GetTotalDaysOffTaken(int employeeId, int leaveTypeId)
         {
-            decimal totalDaysOffTaken = await _db.LeaveRequests.Where(lr => lr.EmployeeId == employeeId && lr.LeaveTypeId == leaveTypeId)
-                 .SumAsync(lr => lr.DurationInDays);
-
-            return totalDaysOffTaken;
+            return await _db.LeaveRequests.AsNoTracking()
+                 .Where(lr => lr.EmployeeId == employeeId && lr.LeaveTypeId == leaveTypeId)
+                 .SumAsync(lr => (decimal?)lr.DurationInDays) ?? 0;
         }
     }
 }

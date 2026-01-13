@@ -14,6 +14,8 @@ namespace DayOffMini.Infrastructure.Repository
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<ILeaveBalanceReportRepository, LeaveBalanceReportRepository>();
+            services.AddScoped<ILeaveBalanceRepository, LeaveBalanceRepository>();
+            services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
 
             return services;
         }
