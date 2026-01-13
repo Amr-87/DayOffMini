@@ -1,9 +1,10 @@
-SELECT `e`.`Id` AS `EmployeeId`, `e`.`Name` AS `EmployeeName`, `l`.`Id` AS `LeaveTypeId`, `l`.`Name` AS `LeaveTypeName`, COALESCE(`l0`.`FixedDaysOffBalance`, 0.0) AS `FixedDaysOffBalance`, COALESCE(`t`.`TotalDaysTaken`, 0.0) AS `DaysTaken`
+SELECT `e`.`Id` AS `EmployeeId`, `e`.`Name` AS `EmployeeName`, `l`.`Id` AS `LeaveTypeId`, `l`.`Name` AS `LeaveTypeName`, CASE
+    WHEN `l0`.`Id` IS NULL THEN 0.0
+    ELSE `l0`.`FixedDaysOffBalance`
+END AS `FixedDaysOffBalance`, COALESCE((
+    SELECT COALESCE(SUM(`l1`.`DurationInDays`), 0.0)
+    FROM `LeaveRequests` AS `l1`
+    WHERE (`l1`.`EmployeeId` = `e`.`Id`) AND (`l1`.`LeaveTypeId` = `l`.`Id`)), 0.0) AS `DaysTaken`
 FROM `Employees` AS `e`
 CROSS JOIN `LeaveTypes` AS `l`
-LEFT JOIN `LeaveBalances` AS `l0` ON (`e`.`Id` = `l0`.`EmployeeId`) AND (`l`.`Id` = `l0`.`LeaveTypeId`)
-LEFT JOIN (
-    SELECT `l1`.`EmployeeId`, `l1`.`LeaveTypeId`, COALESCE(SUM(`l1`.`DurationInDays`), 0.0) AS `TotalDaysTaken`
-    FROM `LeaveRequests` AS `l1`
-    GROUP BY `l1`.`EmployeeId`, `l1`.`LeaveTypeId`
-) AS `t` ON (`e`.`Id` = `t`.`EmployeeId`) AND (`l`.`Id` = `t`.`LeaveTypeId`)
+LEFT JOIN `LeaveBalances` AS `l0` ON (`e`.`Id` = `l0`.`EmployeeId`) AND (`l`.`Id` = `l0`.`LeaveTypeId`)eId`)
