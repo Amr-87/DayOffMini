@@ -65,7 +65,7 @@ namespace DayOffMini.Application.Services
                         FixedDaysOffBalance = x.FixedDaysOffBalance,
                         DaysTaken = x.DaysTaken,
                         DaysOffRemaining = x.FixedDaysOffBalance - x.DaysTaken
-                    }).ToList(),
+                    }).OrderBy(x => x.LeaveTypeId).ToList(),
                     TotalDaysOffBalance = empGroup.Sum(x => x.FixedDaysOffBalance),
                     TotalDaysOffRemaining = empGroup.Sum(x => x.FixedDaysOffBalance - x.DaysTaken)
                 })
