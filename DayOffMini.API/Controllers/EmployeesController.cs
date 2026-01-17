@@ -1,5 +1,6 @@
 ﻿using DayOffMini.Domain.DTOs;
 using DayOffMini.Domain.DTOs.CreateRequests;
+using DayOffMini.Domain.DTOs.Reports;
 using DayOffMini.Domain.DTOs.UpdateRequests;
 using DayOffMini.Domain.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,7 @@ namespace DayOffMini.API.Controllers
             _leaveRequestService = leaveRequestService;
         }
 
+        #region Employees
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateEmployeeDto dto)
         {
@@ -58,6 +60,7 @@ namespace DayOffMini.API.Controllers
             await _employeeService.DeleteAsync(id);
             return NoContent();
         }
+        #endregion
 
         #region Leave Balances
         [HttpGet("{employeeId}/LeaveBalances")]
@@ -107,5 +110,12 @@ namespace DayOffMini.API.Controllers
             return NoContent();
         }
         #endregion
+
+        [HttpGet("LeaveBalances/Report")]
+        public async Task<IActionResult> LeaveBalancesReport()
+        {
+            ICollection<LeaveBalancesReportDto> report = await _leaveBalanceService.GetLeaveBalancesReportAsync();
+            return Ok(report);
+        }
     }
 }

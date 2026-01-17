@@ -7,6 +7,6 @@ namespace DayOffMini.Domain.DTOs.CreateRequests
         public int LeaveTypeId { get; set; }
 
         [Column(TypeName = "decimal(5,2)")]
-        public decimal DaysOffRemaining { get; set; }
+        public decimal FixedDaysOffBalance { get; set; }
     }
 }

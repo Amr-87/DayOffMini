@@ -41,7 +41,7 @@ namespace DayOffMini.Application.Services
                 {
                     Employee = employee, // let EF handle FK
                     LeaveTypeId = leaveType.Id,
-                    DaysOffRemaining = leaveType.DaysOffBalance!.Value
+                    //DaysOffRemaining = leaveType.DaysOffBalance!.Value
                 };
 
                 await _leaveBalanceGenericRepository.CreateAsync(leaveBalance);
