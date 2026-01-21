@@ -3,6 +3,7 @@ using DayOffMini.Domain.DTOs.CreateRequests;
 using DayOffMini.Domain.DTOs.Reports;
 using DayOffMini.Domain.DTOs.UpdateRequests;
 using DayOffMini.Domain.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DayOffMini.API.Controllers
@@ -24,6 +25,7 @@ namespace DayOffMini.API.Controllers
 
         #region Employees
         [HttpPost]
+        [Authorize(Policy = "HRManagerOnly")]
         public async Task<IActionResult> Create([FromBody] CreateEmployeeDto dto)
         {
             await _employeeService.CreateAsync(dto);
@@ -38,6 +40,7 @@ namespace DayOffMini.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetById(int id)
         {
             EmployeeDto? employeeDto = await _employeeService.GetByIdAsync(id);
@@ -48,6 +51,7 @@ namespace DayOffMini.API.Controllers
             return Ok(employeeDto);
         }
         [HttpGet]
+        [Authorize(Policy = "HRManagerOnly")]
         public async Task<IActionResult> GetAll()
         {
             ICollection<EmployeeDto> dtos = await _employeeService.GetAllAsync();
