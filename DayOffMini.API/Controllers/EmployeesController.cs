@@ -33,7 +33,7 @@ namespace DayOffMini.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateEmployeeDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateEmployeeNameDto dto)
         {
             await _employeeService.UpdateAsync(id, dto);
             return NoContent();

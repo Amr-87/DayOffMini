@@ -26,7 +26,7 @@ namespace DayOffMini.Application.Services
             {
                 return null;
             }
-            if (employee.Password != password)
+            if (!BCrypt.Net.BCrypt.Verify(password, employee.Password))
             {
                 return null;
             }

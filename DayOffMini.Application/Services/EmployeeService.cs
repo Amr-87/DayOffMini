@@ -29,6 +29,7 @@ namespace DayOffMini.Application.Services
         public async Task CreateAsync(CreateEmployeeDto dto)
         {
             Employee employee = _mapper.Map<Employee>(dto);
+            employee.Password = BCrypt.Net.BCrypt.HashPassword(employee.Password);
             await _genericRepository.CreateAsync(employee);
 
             #region Create Leave Balanaces
@@ -51,7 +52,7 @@ namespace DayOffMini.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(int id, UpdateEmployeeDto dto)
+        public async Task UpdateAsync(int id, UpdateEmployeeNameDto dto)
         {
             Employee employee = await _genericRepository.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException($"Employee with ID {id} not found");
