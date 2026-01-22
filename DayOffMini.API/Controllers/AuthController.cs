@@ -17,7 +17,7 @@ namespace DayOffMini.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var token = await _authService.LoginAsync(request.Email, request.Password);
+            string? token = await _authService.LoginAsync(request.Email, request.Password);
             if (token == null)
                 return Unauthorized(new { Message = "Invalid credentials" });
 
