@@ -14,7 +14,7 @@ namespace DayOffMini.Application.MappingProfiles
 
             CreateMap<Employee, CreateEmployeeDto>().ReverseMap();
 
-            CreateMap<Employee, UpdateEmployeeDto>().ReverseMap();
+            CreateMap<Employee, UpdateEmployeeNameDto>().ReverseMap();
 
         }
     }

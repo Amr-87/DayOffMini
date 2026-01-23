@@ -4,6 +4,7 @@ using DayOffMini.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DayOffMini.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260112152016_modifyingLeaveBalancesAndRequests")]
+    partial class modifyingLeaveBalancesAndRequests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,20 +46,6 @@ namespace DayOffMini.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "amr@dayoffmini.com",
-                            Password = "$2a$11$ze1.ANcBDNd3JeiszbxXm.DUaGD8aHVo.U0IArbXCle0NgFUe/cMq"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "yasser@dayoffmini.com",
-                            Password = "$2a$11$SgFz/Vihqbwx4TRv3DIg5u1spJkYg.9voSzAaScIa3.Ao77H809n2"
-                        });
                 });
 
             modelBuilder.Entity("DayOffMini.Domain.Models.LeaveBalance", b =>
