@@ -51,7 +51,7 @@ namespace DayOffMini.API.Controllers
             return Ok(employeeDto);
         }
         [HttpGet]
-        [Authorize(Policy = "HRManagerOnly")]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             ICollection<EmployeeDto> dtos = await _employeeService.GetAllAsync();

@@ -1,6 +1,5 @@
 ﻿using DayOffMini.Domain.Interfaces.IRepositories;
 using DayOffMini.Domain.Interfaces.IServices;
-using DayOffMini.Domain.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,37 +10,36 @@ namespace DayOffMini.Application.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IUserRepo _userRepo;
         private readonly IConfiguration _configuration;
 
-        public AuthService(IEmployeeRepository employeeRepository, IConfiguration configuration)
+        public AuthService(IUserRepo userRepo, IConfiguration configuration)
         {
-            _employeeRepository = employeeRepository;
+            _userRepo = userRepo;
             _configuration = configuration;
         }
         public async Task<string?> LoginAsync(string email, string password)
         {
-            Employee? employee = await _employeeRepository.GetEmployeeByEmailAsync(email);
-            if (employee == null)
+            User? user = await _userRepo.GetUserByEmailAsync(email);
+            if (user == null)
             {
                 return null;
             }
-            if (!BCrypt.Net.BCrypt.Verify(password, employee.Password))
+            if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             {
                 return null;
             }
-            return GenerateToken(employee);
+            return GenerateToken(user);
         }
 
-        private string GenerateToken(Employee employee)
+        private string GenerateToken(User user)
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             byte[] key = Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!);
 
             Claim[] claims =
             {
-                new Claim(ClaimTypes.NameIdentifier, employee.Id.ToString()),
-                new Claim(ClaimTypes.Name, employee.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
