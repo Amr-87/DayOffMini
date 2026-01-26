@@ -1,4 +1,7 @@
-﻿using DayOffMini.Domain.Interfaces.IRepositories;
+﻿using AutoMapper;
+using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.Interfaces;
+using DayOffMini.Domain.Interfaces.IRepositories;
 using DayOffMini.Domain.Interfaces.IServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -11,13 +14,26 @@ namespace DayOffMini.Application.Services
     public class AuthService : IAuthService
     {
         private readonly IUserRepo _userRepo;
+        private readonly IGenericRepository<User> _genericRepo;
+        private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public AuthService(IUserRepo userRepo, IConfiguration configuration)
+        public AuthService(IUserRepo userRepo, IGenericRepository<User> genericRepo, IMapper mapper, IConfiguration configuration)
         {
             _userRepo = userRepo;
+            _genericRepo = genericRepo;
+            _mapper = mapper;
             _configuration = configuration;
         }
+
+        public async Task<UserDTO?> GetUserById(int userId)
+        {
+            User? user = await _genericRepo.GetByIdAsync(userId);
+            if (user == null) return null;
+            UserDTO userDTO = _mapper.Map<UserDTO>(user);
+            return userDTO;
+        }
+
         public async Task<string?> LoginAsync(string email, string password)
         {
             User? user = await _userRepo.GetUserByEmailAsync(email);

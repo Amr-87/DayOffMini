@@ -1,5 +1,7 @@
-﻿using DayOffMini.Domain.DTOs.Auth;
+﻿using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.DTOs.Auth;
 using DayOffMini.Domain.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DayOffMini.API.Controllers
@@ -22,6 +24,18 @@ namespace DayOffMini.API.Controllers
                 return Unauthorized(new { Message = "Invalid credentials" });
 
             return Ok(new { Token = token });
+        }
+
+        [HttpGet("user/{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetById(int id)
+        {
+            UserDTO? userDto = await _authService.GetUserById(id);
+            if (userDto == null)
+            {
+                return NotFound("user not found");
+            }
+            return Ok(userDto);
         }
 
     }
