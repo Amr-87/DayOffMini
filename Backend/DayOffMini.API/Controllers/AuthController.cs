@@ -37,6 +37,5 @@ namespace DayOffMini.API.Controllers
             }
             return Ok(userDto);
         }
-
     }
 }
