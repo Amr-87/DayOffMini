@@ -29,7 +29,6 @@ namespace DayOffMini.Application.Services
         public async Task CreateAsync(CreateEmployeeDto dto)
         {
             Employee employee = _mapper.Map<Employee>(dto);
-            employee.Password = BCrypt.Net.BCrypt.HashPassword(employee.Password);
             await _genericRepository.CreateAsync(employee);
 
             #region Create Leave Balanaces

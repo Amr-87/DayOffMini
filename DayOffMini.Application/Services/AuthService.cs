@@ -1,6 +1,8 @@
-﻿using DayOffMini.Domain.Interfaces.IRepositories;
+﻿using AutoMapper;
+using DayOffMini.Domain.DTOs;
+using DayOffMini.Domain.Interfaces;
+using DayOffMini.Domain.Interfaces.IRepositories;
 using DayOffMini.Domain.Interfaces.IServices;
-using DayOffMini.Domain.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,37 +13,49 @@ namespace DayOffMini.Application.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IUserRepo _userRepo;
+        private readonly IGenericRepository<User> _genericRepo;
+        private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public AuthService(IEmployeeRepository employeeRepository, IConfiguration configuration)
+        public AuthService(IUserRepo userRepo, IGenericRepository<User> genericRepo, IMapper mapper, IConfiguration configuration)
         {
-            _employeeRepository = employeeRepository;
+            _userRepo = userRepo;
+            _genericRepo = genericRepo;
+            _mapper = mapper;
             _configuration = configuration;
         }
-        public async Task<string?> LoginAsync(string email, string password)
+
+        public async Task<UserDTO?> GetUserById(int userId)
         {
-            Employee? employee = await _employeeRepository.GetEmployeeByEmailAsync(email);
-            if (employee == null)
-            {
-                return null;
-            }
-            if (!BCrypt.Net.BCrypt.Verify(password, employee.Password))
-            {
-                return null;
-            }
-            return GenerateToken(employee);
+            User? user = await _genericRepo.GetByIdAsync(userId);
+            if (user == null) return null;
+            UserDTO userDTO = _mapper.Map<UserDTO>(user);
+            return userDTO;
         }
 
-        private string GenerateToken(Employee employee)
+        public async Task<string?> LoginAsync(string email, string password)
+        {
+            User? user = await _userRepo.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                return null;
+            }
+            if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+            {
+                return null;
+            }
+            return GenerateToken(user);
+        }
+
+        private string GenerateToken(User user)
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             byte[] key = Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!);
 
             Claim[] claims =
             {
-                new Claim(ClaimTypes.NameIdentifier, employee.Id.ToString()),
-                new Claim(ClaimTypes.Name, employee.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor

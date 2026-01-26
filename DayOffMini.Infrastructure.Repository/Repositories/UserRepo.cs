@@ -1,21 +1,20 @@
 ﻿using DayOffMini.Domain.Interfaces.IRepositories;
-using DayOffMini.Domain.Models;
 using DayOffMini.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 
 namespace DayOffMini.Infrastructure.Repository.Repositories
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class UserRepo : IUserRepo
     {
         private readonly AppDbContext _db;
 
-        public EmployeeRepository(AppDbContext db)
+        public UserRepo(AppDbContext db)
         {
             _db = db;
         }
-        public async Task<Employee?> GetEmployeeByEmailAsync(string email)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
-            return await _db.Employees.FirstOrDefaultAsync(e => e.Email == email);
+            return await _db.Users.FirstOrDefaultAsync(e => e.Email == email);
         }
     }
 }

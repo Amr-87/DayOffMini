@@ -2,7 +2,7 @@
 
 namespace DayOffMini.Domain.DTOs
 {
-    public class EmployeeDto
+    public class UserDTO
     {
         public int Id { get; set; }
 
@@ -11,6 +11,9 @@ namespace DayOffMini.Domain.DTOs
 
         [MaxLength(256)]
         public string? Email { get; set; }
+
+        [MaxLength(20)]
+        public string? PhoneNumber { get; set; }
 
     }
 }

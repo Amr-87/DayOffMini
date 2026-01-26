@@ -9,10 +9,12 @@ namespace DayOffMini.Domain.Models
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public string Email { get; set; } = null!;
+        [MaxLength(100)]
         public string? Name { get; set; }
-        public string? Password { get; set; }
 
+        [Required]
+        [MaxLength(256)]
+        public string? Email { get; set; }
         public virtual ICollection<LeaveRequest> LeaveRequests { get; set; } = new HashSet<LeaveRequest>();
         public virtual ICollection<LeaveBalance> LeaveBalances { get; set; } = new HashSet<LeaveBalance>();
     }
