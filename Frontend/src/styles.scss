@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+/* Dark mode variant */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 🎨 Theme */
+@theme {
+    --color-brand-primary: #FD3177;
+    --color-brand-primary-hover: #e12b68;
+    --color-bg-light: #f9fafb;
+    --color-bg-dark: #111827;
+}
