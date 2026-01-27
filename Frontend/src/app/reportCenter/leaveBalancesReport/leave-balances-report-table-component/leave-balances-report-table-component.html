@@ -1,0 +1,71 @@
+<div class="mt-10">
+
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+            <h2 class="text-lg font-semibold">
+                Total requests ({{ totalRequests }})
+            </h2>
+            <p class="text-sm text-gray-500">{{ startDate }} to {{ endDate }}</p>
+        </div>
+
+        <div class="flex gap-3">
+            <button class="px-4 py-2 rounded-lg border text-sm">Print</button>
+            <button class="px-4 py-2 rounded-lg bg-brand-primary text-white text-sm">Export Excel</button>
+        </div>
+    </div>
+
+    <div class="mt-4 overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+        <div class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <mat-form-field class="w-full sm:w-1/3">
+                <input matInput (keyup)="applyFilter($event)" placeholder="Filter by employee or leave type" />
+            </mat-form-field>
+        </div>
+
+        <div class="mt-6 overflow-x-auto border rounded-lg border-gray-200 dark:border-gray-700">
+            <table mat-table [dataSource]="dataSource" matSort
+                class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+
+                <!-- Employee Column -->
+                <ng-container matColumnDef="employee">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                        class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-200">Employee</th>
+                    <td mat-cell *matCellDef="let element" class="px-4 py-2 text-gray-600 dark:text-gray-300">{{
+                        element.employee }}</td>
+                </ng-container>
+
+                <!-- Dynamic Leave Type Columns -->
+                <ng-container *ngFor="let type of leaveTypes" [matColumnDef]="type">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                        class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-200">{{ type }}</th>
+                    <td mat-cell *matCellDef="let element" class="px-4 py-2 text-gray-600 dark:text-gray-300">{{
+                        element[type] }}</td>
+                </ng-container>
+
+                <!-- Total Days Column -->
+                <ng-container matColumnDef="totalDays">
+                    <th mat-header-cell *matHeaderCellDef
+                        class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-200">Total (Days)</th>
+                    <td mat-cell *matCellDef="let element" class="px-4 py-2 text-gray-600 dark:text-gray-300">{{
+                        element.totalDays }}</td>
+                </ng-container>
+
+                <!-- Total Hours Column -->
+                <ng-container matColumnDef="totalHours">
+                    <th mat-header-cell *matHeaderCellDef
+                        class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-200">Total (Hours)</th>
+                    <td mat-cell *matCellDef="let element" class="px-4 py-2 text-gray-600 dark:text-gray-300">{{
+                        element.totalHours }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons class="mt-4"></mat-paginator>
+        </div>
+    </div>
+
+    <p class="mt-4 text-xs text-red-500">
+        Note: Leave types with no maximum balance will not be added to total
+    </p>
+</div>

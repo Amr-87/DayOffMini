@@ -1,0 +1,31 @@
+<div class="relative w-40">
+
+    <!-- Trigger -->
+    <button type="button" (click)="isOpen = !isOpen"
+        class="w-full px-3 py-2 rounded-lg text-sm bg-white flex justify-between items-center">
+        {{ displayValue() }}
+        <span class="text-xs">▼</span>
+    </button>
+
+    @if (isOpen) {
+    <div class="absolute mt-1 w-full bg-white border rounded-lg shadow z-50">
+
+        <!-- Select All -->
+        <label class="flex items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-100">
+            <input type="checkbox" [checked]="isAllSelected()" (change)="toggleSelectAll($any($event.target).checked)"
+                class="mr-2" />
+            Select All
+        </label>
+
+        <!-- Policies -->
+        @for (policy of policies; track policy) {
+        <label class="flex items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-100">
+            <input type="checkbox" [checked]="leavePolicyFilter.includes(policy)" (change)="togglePolicy(policy)"
+                class="mr-2" />
+            {{ policy }}
+        </label>
+        }
+    </div>
+    }
+
+</div>
