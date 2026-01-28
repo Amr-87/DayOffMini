@@ -4,6 +4,7 @@ import { DashboardPage } from './dashboard-page/dashboard-page';
 import { authGuard } from './guards/auth-guard';
 import { LeaveBalancesReportPage } from './reportCenter/leaveBalancesReport/leave-balances-report-page/leave-balances-report-page';
 import { ReportCenterPage } from './reportCenter/report-center-page/report-center-page';
+import { NotFoundPage } from './shared/not-found-page/not-found-page';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPage },
@@ -20,4 +21,6 @@ export const routes: Routes = [
     ],
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+  { path: '**', component: NotFoundPage },
 ];

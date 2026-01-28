@@ -1,14 +1,17 @@
 import { Component, signal } from '@angular/core';
+import { Sidebar } from '../sidebar/sidebar';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [Sidebar],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
 export class navbar {
   // userName = signal(''); // later get from JWT or API
   darkModeOn = signal(false);
+  isMenuOpen = false;
+
   // constructor(
   //   private authService: AuthService,
   //   private router: Router,
