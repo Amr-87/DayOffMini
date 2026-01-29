@@ -33,25 +33,7 @@
 </div>
 
 <!-- Filters -->
-<div
-    class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white dark:bg-gray-800 p-4 rounded-lg transition-colors">
-    <div class="flex flex-row flex-wrap gap-3 w-auto lg:w-auto">
-        <app-team-dropdown-component></app-team-dropdown-component>
-        <app-location-multi-select-dropdown-component></app-location-multi-select-dropdown-component>
-        <app-leave-policy-multi-select-dropdown-component></app-leave-policy-multi-select-dropdown-component>
-    </div>
-
-    <div class="flex gap-2">
-        <button
-            class="px-4 py-2 rounded-lg shadow-sm text-sm sm:text-base hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-            Clear Filters
-        </button>
-        <button
-            class="px-4 py-2 rounded-lg bg-brand-primary text-white text-sm sm:text-base hover:opacity-90 transition-opacity">
-            Filter
-        </button>
-    </div>
-</div>
+<app-filters-bar (filterChange)="onFilterChange($event)"></app-filters-bar>
 
 <!-- Analytics Section -->
 <div class="mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm transition-colors">
@@ -136,5 +118,5 @@
 </div>
 
 <div class="w-full">
-    <app-leave-balances-report-table></app-leave-balances-report-table>
+    <app-leave-balances-report-table (leaveTypesOutput)="onLeaveTypesChange($event)"></app-leave-balances-report-table>
 </div>

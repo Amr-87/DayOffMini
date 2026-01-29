@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth-service';
+import { AuthService } from '../../shared/services/auth-service';
 
 @Component({
   selector: 'app-login-component',
@@ -37,7 +37,7 @@ export class LoginComponent {
       next: (response) => {
         this.isLoading.set(false);
         this.authService.saveToken((response as any).token);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/dashboard']);
 
         alert('Logged in successfully');
       },

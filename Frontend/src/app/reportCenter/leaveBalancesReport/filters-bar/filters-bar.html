@@ -1,0 +1,40 @@
+<div
+    class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white dark:bg-gray-800 p-4 rounded-lg transition-colors">
+
+    <div class="flex flex-row flex-wrap gap-3 w-full lg:w-auto">
+
+        <!-- Teams -->
+        <div class="w-40">
+            <ng-select [items]="allTeams" [(ngModel)]="filters.teams" [multiple]="true" [searchable]="true"
+                bindLabel="name" placeholder="Team" [clearable]="true" class="dark:bg-gray-800">
+            </ng-select>
+        </div>
+
+        <!-- Locations -->
+        <div class="w-28">
+            <ng-select [items]="allLocations" [(ngModel)]="filters.locations" [multiple]="true" placeholder="Location"
+                [clearable]="true" class="dark:bg-gray-800">
+            </ng-select>
+        </div>
+
+        <!-- Policies -->
+        <div class="w-32">
+            <ng-select [items]="allPolicies" [(ngModel)]="filters.policies" [multiple]="true" placeholder="Policy"
+                [clearable]="true" class="dark:bg-gray-800">
+            </ng-select>
+        </div>
+
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex gap-2 mt-2 lg:mt-0">
+        <button (click)="clearFilters()"
+            class="px-4 py-2 rounded-lg shadow-sm text-sm sm:text-base hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+            Clear Filters
+        </button>
+        <button (click)="applyFilters()"
+            class="px-4 py-2 rounded-lg bg-brand-primary text-white text-sm sm:text-base hover:opacity-90 transition-opacity">
+            Filter
+        </button>
+    </div>
+</div>

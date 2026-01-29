@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
-  computed,
   OnInit,
+  output,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -14,8 +14,9 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeesServices } from '../../../employees/employees-services';
-import { LeaveBalancesReportService } from '../../_services/leave-balances-report-service';
-import { EmployeeLeave } from '../LeaveBalanceModel';
+import { LeaveTypeDTO } from '../../../leaveTypes/LeaveTypeDTO';
+import { LeaveBalancesReportService } from '../../../shared/services/leave-balances-report-service';
+import { LeaveBalancesReportDTO } from '../LeaveBalancesReportDTO';
 
 @Component({
   selector: 'app-leave-balances-report-table',
@@ -35,43 +36,31 @@ import { EmployeeLeave } from '../LeaveBalanceModel';
 export class LeaveBalancesReportTableComponent
   implements OnInit, AfterViewInit
 {
-  employees: EmployeeLeave[] = [];
-  // leaveTypes: string[] = [];
-  // UI-friendly shape
-  leaveTypes = computed(() =>
-    this.reportService.leaveTypes().map((lt) => ({
-      id: lt.id,
-      name: lt.name,
-      color: lt.color ?? '#ccc',
-    })),
-  );
-  leaveTypeNames: string[] = [];
+  totalRequests = 0;
+  startDate = '2026-01-01';
+  endDate = '2026-01-31';
 
+  employees: LeaveBalancesReportDTO[] = [];
+  leaveTypeNames: string[] = [];
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  itemsPerPage = 5;
-  startItem = 1;
-  endItem = 5;
-  totalRequests = 0;
-
-  startDate = '2026-01-01';
-  endDate = '2026-01-31';
   searchText = signal<string>('');
+  leaveTypesOutput = output<LeaveTypeDTO[]>();
 
   constructor(
     private employeeService: EmployeesServices,
     private reportService: LeaveBalancesReportService,
   ) {}
   ngOnInit() {
-    // Optional: show placeholder or loading
     this.employeeService
       .getLeaveBalancesReport()
-      .subscribe((data: EmployeeLeave[]) => {
+      .subscribe((data: LeaveBalancesReportDTO[]) => {
         this.employees = data;
+
         // Get unique leave types
         const leaveSet = new Set<string>();
         this.employees.forEach((emp) =>
@@ -103,31 +92,27 @@ export class LeaveBalancesReportTableComponent
 
         this.dataSource.data = tableData;
         this.totalRequests = this.employees.length;
-        this.endItem = Math.min(this.itemsPerPage, this.totalRequests);
 
-        this.reportService.leaveTypes.set(
-          this.leaveTypeNames.map((name, index) => {
-            // Calculate sum of daysTaken and fixedDaysOffBalance for this leave type
-            let totalTaken = 0;
-            let totalBalance = 0;
+        // compute leave types
+        const computedLeaveTypes = this.leaveTypeNames.map((name, index) => {
+          let totalTaken = 0;
+          let totalBalance = 0;
 
-            this.employees.forEach((emp) => {
-              const lb = emp.leaveBalances.find(
-                (l) => l.leaveTypeName === name,
-              );
-              totalTaken += lb ? lb.daysTaken : 0;
-              totalBalance += emp.totalDaysOffBalance;
-            });
+          this.employees.forEach((emp) => {
+            const lb = emp.leaveBalances.find((l) => l.leaveTypeName === name);
+            totalTaken += lb ? lb.daysTaken : 0;
+            totalBalance += emp.totalDaysOffBalance;
+          });
+          return {
+            id: index + 1,
+            name,
+            color: this.reportService.generateNiceColor(),
+            reportCirclePercentage:
+              totalBalance > 0 ? totalTaken / totalBalance : 0,
+          };
+        });
 
-            return {
-              id: index + 1,
-              name,
-              color: this.reportService.generateNiceColor(),
-              reportCirclePercentage:
-                totalBalance > 0 ? totalTaken / totalBalance : 0,
-            };
-          }),
-        );
+        this.leaveTypesOutput.emit(computedLeaveTypes);
       });
   }
 

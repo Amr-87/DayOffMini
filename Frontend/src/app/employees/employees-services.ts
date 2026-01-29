@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { EmployeeLeave } from '../reportCenter/leaveBalancesReport/LeaveBalanceModel';
+import { LeaveBalancesReportDTO } from '../reportCenter/leaveBalancesReport/LeaveBalancesReportDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class EmployeesServices {
   }
 
   getLeaveBalancesReport() {
-    return this.http.get<EmployeeLeave[]>(
+    return this.http.get<LeaveBalancesReportDTO[]>(
       `${this.baseUrl}/LeaveBalances/Report`,
     );
   }
