@@ -12,16 +12,11 @@
             <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100 truncate">
                 Balances Report
             </h1>
-            <div class="relative ml-auto">
-                <select
-                    class="w-full appearance-none px-4 py-2 pr-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm sm:text-base text-gray-700 dark:text-gray-200 transition-colors">
-                    <option>Last Year</option>
-                    <option>This Year</option>
-                    <option>Next Year</option>
-                </select>
 
-                <img src="assets/balances-report/calendar.svg" alt="dropdown"
-                    class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 opacity-70" />
+            <div class="ml-auto w-40">
+                <ng-select ngSelectIcon="calendar_today" [items]="years" [(ngModel)]="selectedYear"
+                    (change)="onYearChange($event)" [clearable]="false" [searchable]="false" class="ng-select-tailwind">
+                </ng-select>
             </div>
         </div>
 

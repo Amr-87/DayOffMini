@@ -6,13 +6,12 @@ import { ReportFiltersModel } from '../ReportFiltersModel';
 @Component({
   selector: 'app-filters-bar',
   standalone: true,
-  imports: [FormsModule, NgSelectModule],
+  imports: [NgSelectModule, FormsModule],
   templateUrl: './filters-bar.html',
 })
 export class FiltersBar {
   filterChange = output<ReportFiltersModel>();
 
-  // Options
   allTeams = [
     'Marketing',
     'Engineering',
@@ -25,25 +24,18 @@ export class FiltersBar {
   allLocations = ['Egypt', 'USA'];
   allPolicies = ['Default Policy'];
 
-  // Filters model
   filters: ReportFiltersModel = {
     teams: [],
     locations: [],
     policies: [],
   };
 
-  // Team search handled by ng-select filter
-  teamSearch = '';
-
-  // --- Methods ---
   applyFilters() {
-    console.log('Applied filters:', this.filters);
     this.filterChange.emit(this.filters);
   }
 
   clearFilters() {
     this.filters = { teams: [], locations: [], policies: [] };
-    this.teamSearch = '';
-    console.log('Cleared filters');
+    this.applyFilters();
   }
 }
