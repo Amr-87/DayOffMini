@@ -1,14 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { Sidebar } from '../sidebar/sidebar';
 
 @Component({
-  selector: 'app-header-component',
-  imports: [],
-  templateUrl: './header-component.html',
-  styleUrl: './header-component.scss',
+  selector: 'app-navbar',
+  imports: [Sidebar],
+  templateUrl: './navbar.html',
+  styleUrl: './navbar.scss',
 })
-export class HeaderComponent {
+export class navbar {
   // userName = signal(''); // later get from JWT or API
-  // darkModeOn = signal(false);
+  darkModeOn = signal(false);
+  isMenuOpen = false;
+
   // constructor(
   //   private authService: AuthService,
   //   private router: Router,
@@ -26,8 +29,8 @@ export class HeaderComponent {
   //   this.authService.logout();
   //   this.router.navigate(['/login']);
   // }
-  // toggleDarkMode() {
-  //   document.documentElement.classList.toggle('dark');
-  //   this.darkModeOn.set(!this.darkModeOn());
-  // }
+  toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
+    this.darkModeOn.set(!this.darkModeOn());
+  }
 }
