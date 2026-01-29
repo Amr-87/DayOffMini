@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, output, signal } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ReportFiltersModel } from '../ReportFiltersModel';
@@ -7,11 +6,11 @@ import { ReportFiltersModel } from '../ReportFiltersModel';
 @Component({
   selector: 'app-filters-bar',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgSelectModule],
+  imports: [FormsModule, NgSelectModule],
   templateUrl: './filters-bar.html',
 })
 export class FiltersBar {
-  @output() filterChange = signal<ReportFiltersModel>();
+  filterChange = output<ReportFiltersModel>();
 
   // Options
   allTeams = [
