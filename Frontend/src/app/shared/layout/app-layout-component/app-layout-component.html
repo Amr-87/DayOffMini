@@ -1,0 +1,12 @@
+<app-trial-bar></app-trial-bar>
+<app-navbar></app-navbar>
+
+<div class="flex min-h-[calc(100vh-4rem)]">
+    <!-- Sidebar -->
+    <app-sidebar class="hidden md:block"></app-sidebar>
+
+    <!-- Page content -->
+    <main class="bg-gray-100 dark:bg-gray-900 w-full p-3 md:p-8  overflow-auto">
+        <router-outlet></router-outlet>
+    </main>
+</div>
