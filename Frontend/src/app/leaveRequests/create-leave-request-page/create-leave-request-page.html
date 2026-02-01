@@ -1,4 +1,4 @@
-<div class="max-w-5xl mx-auto p-6">
+<div class="max-w-5xl mx-auto p-2">
 
     <!-- Page Header -->
     <div class="flex items-center gap-3 mb-6">
@@ -28,16 +28,33 @@
                 <span>{{ errorMessage() }}</span>
             </div>
             }
-            <!-- Leave Type -->
-            <div>
-                <label class="block mb-1 text-sm font-medium text-gray-700">
-                    Select Leave Type
-                </label>
 
-                <ng-select name="leaveTypeId" [items]="leaveTypes" bindLabel="name" bindValue="id"
-                    [(ngModel)]="leaveRequest().leaveTypeId" placeholder="Select leave type">
-                </ng-select>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <!-- Select Employee -->
+                <div>
+                    <label class="block mb-1 text-sm font-medium text-gray-700">
+                        Select Employee
+                    </label>
+
+                    <ng-select name="employeeId" [items]="employees" bindLabel="name" bindValue="id"
+                        [(ngModel)]="employeeId" placeholder="Select employee">
+                    </ng-select>
+                </div>
+
+                <!-- Select Leave Type -->
+                <div>
+                    <label class="block mb-1 text-sm font-medium text-gray-700">
+                        Select Leave Type
+                    </label>
+
+                    <ng-select name="leaveTypeId" [items]="leaveTypes" bindLabel="name" bindValue="id"
+                        [(ngModel)]="leaveRequest().leaveTypeId" placeholder="Select leave type">
+                    </ng-select>
+                </div>
+
             </div>
+
 
             <!-- Duration -->
             <div>

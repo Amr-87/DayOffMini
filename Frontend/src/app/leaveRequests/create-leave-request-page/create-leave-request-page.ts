@@ -3,6 +3,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CreateLeaveRequestDTO } from '../../shared/models/create-leave-request-dto';
+import { EmployeeDTO } from '../../shared/models/employee-dto';
 import { LeaveTypeDTO } from '../../shared/models/LeaveTypeDTO';
 import { AuthService } from '../../shared/services/auth-service';
 import { EmployeesServices } from '../../shared/services/employees-services';
@@ -16,8 +17,10 @@ import { LeaveTypesService } from '../../shared/services/leave-types-service';
   styleUrl: './create-leave-request-page.scss',
 })
 export class CreateLeaveRequestPage implements OnInit {
-  userId: number | null = null;
+  // userId: number | null = null;
+  employees: EmployeeDTO[] = [];
   leaveTypes: LeaveTypeDTO[] = [];
+  employeeId = signal<number | undefined>(undefined);
 
   // Signals
   leaveRequest = signal<CreateLeaveRequestDTO>({
@@ -35,10 +38,14 @@ export class CreateLeaveRequestPage implements OnInit {
     private location: Location,
     private leaveTypesService: LeaveTypesService,
     private authService: AuthService,
-    private employeesSeervice: EmployeesServices,
+    private employeesService: EmployeesServices,
   ) {}
 
   ngOnInit(): void {
+    this.employeesService
+      .getAllEmployees()
+      .subscribe((emps) => (this.employees = emps));
+
     this.leaveTypesService.getAll().subscribe((types) => {
       this.leaveTypes = types;
 
@@ -51,7 +58,7 @@ export class CreateLeaveRequestPage implements OnInit {
       }
     });
 
-    this.userId = this.authService.getUserId();
+    // this.userId = this.authService.getUserId();
   }
 
   cancel(): void {
@@ -71,10 +78,11 @@ export class CreateLeaveRequestPage implements OnInit {
     };
 
     console.log('payload :', payload);
+    console.log('employeeId :', this.employeeId());
 
-    if (this.userId) {
-      this.employeesSeervice
-        .createLeaveRequest(this.userId, payload)
+    if (this.employeeId()) {
+      this.employeesService
+        .createLeaveRequest(this.employeeId()!, payload)
         .subscribe({
           next: (res) => {
             console.log('Leave request submitted successfully:', res);
