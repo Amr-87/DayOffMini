@@ -21,7 +21,6 @@ import { LeaveBalancesReportDTO } from '../LeaveBalancesReportDTO';
 @Component({
   selector: 'app-leave-balances-report-table',
   templateUrl: './leave-balances-report-table-component.html',
-  styleUrls: ['./leave-balances-report-table-component.scss'],
   standalone: true,
   imports: [
     CommonModule,

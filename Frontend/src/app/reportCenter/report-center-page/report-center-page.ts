@@ -20,7 +20,6 @@ import { RouterLink } from '@angular/router';
     MatProgressSpinnerModule,
   ],
   templateUrl: './report-center-page.html',
-  styleUrl: './report-center-page.scss',
 })
 export class ReportCenterPage {
   mode: ProgressSpinnerMode = 'determinate';

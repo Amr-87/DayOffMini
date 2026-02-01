@@ -8,6 +8,5 @@ import { TrialBar } from '../trial-bar/trial-bar';
   selector: 'app-app-layout-component',
   imports: [RouterOutlet, Sidebar, navbar, TrialBar],
   templateUrl: './app-layout-component.html',
-  styleUrl: './app-layout-component.scss',
 })
 export class AppLayoutComponent {}

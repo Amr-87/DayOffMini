@@ -7,7 +7,6 @@ import { AuthService } from '../../shared/services/auth-service';
   selector: 'app-login-component',
   imports: [FormsModule],
   templateUrl: './login-component.html',
-  styleUrl: './login-component.scss',
 })
 export class LoginComponent {
   model = {

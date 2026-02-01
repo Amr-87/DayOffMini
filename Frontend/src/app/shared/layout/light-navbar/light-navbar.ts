@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-light-navbar',
   imports: [],
   templateUrl: './light-navbar.html',
-  styleUrl: './light-navbar.scss',
 })
 export class LightNavbar {
   toggleDarkMode() {
