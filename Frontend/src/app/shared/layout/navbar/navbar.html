@@ -1,0 +1,91 @@
+<!-- Header -->
+<header class="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 h-12 py-1 flex items-center justify-between">
+
+        <!-- Left: Logo + App name -->
+        <div class="flex items-center gap-2">
+            <img src="assets/navbar/logo.svg" alt="Logo" class="h-11 w-auto" />
+        </div>
+
+        <!-- Center: Upgrade CTA (desktop only) -->
+        <div class="hidden md:flex items-center text-xs text-gray-600 dark:text-gray-400">
+            <span class="mr-1">Upgrade to pro account!</span>
+            <a href="/upgrade" class="text-blue-600 dark:text-blue-400 font-medium hover:underline">Upgrade now</a>
+        </div>
+
+        <!-- Right: Support, Dark mode toggle, Notifications, Avatar, Mobile menu button -->
+        <div class="flex items-center gap-4">
+
+            <!-- Support (desktop only) -->
+            <a href="/support"
+                class="hidden md:block text-xs text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                Support
+            </a>
+
+            <!-- Dark mode toggle (always visible) -->
+            <button (click)="toggleDarkMode()"
+                class="w-5 h-5 rounded-full border border-gray-300 dark:border-gray-600 bg-gray-800 dark:bg-white hover:scale-110 transition focus:outline-none"
+                aria-label="Toggle dark mode"></button>
+
+            <!-- Notifications (desktop only) -->
+            <div class="hidden sm:flex w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700 items-center justify-center cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                aria-label="Notifications">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700 dark:text-gray-200" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11
+                   a6.002 6.002 0 00-4-5.659V4
+                   a2 2 0 10-4 0v1.341
+                   C7.67 6.165 6 8.388 6 11v3.159
+                   c0 .538-.214 1.055-.595 1.436L4 17h5
+                   m6 0a3 3 0 11-6 0" />
+                </svg>
+            </div>
+
+            <!-- Avatar (always visible) -->
+            <div
+                class="w-7 h-7 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center cursor-pointer">
+                <span class="text-xs text-gray-700 dark:text-gray-300">U</span>
+            </div>
+
+            <!-- Mobile menu button -->
+            <button class="md:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                (click)="isMenuOpen = !isMenuOpen" aria-label="Toggle menu">
+                <svg class="w-6 h-6 text-gray-800 dark:text-gray-200 transition-transform duration-300"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    @if (!isMenuOpen) {
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                    }
+                    @else {
+                    <line x1="4.5" y1="4.5" x2="19.5" y2="19.5"></line>
+                    <line x1="19.5" y1="4.5" x2="4.5" y2="19.5"></line>
+                    }
+                </svg>
+            </button>
+
+        </div>
+    </div>
+
+    <!-- Mobile dropdown / sidebar -->
+    @if (isMenuOpen) {
+
+    <!-- Overlay wrapper -->
+    <div class="fixed inset-0 z-40 flex" (click)="isMenuOpen = false">
+        <!-- Backdrop blur -->
+        <div class="absolute inset-0 backdrop-blur-sm"></div>
+
+        <!-- Semi-transparent dark tint -->
+        <div class="absolute inset-0 bg-opacity-25"></div>
+    </div>
+
+    <!-- Sidebar panel -->
+    <div class="fixed top-0 right-0 h-full w-64 bg-white dark:bg-gray-900 shadow-lg z-50
+           transform transition-transform duration-300 ease-in-out" [class.translate-x-full]="!isMenuOpen"
+        [class.translate-x-0]="isMenuOpen">
+        <app-sidebar></app-sidebar>
+    </div>
+    }
+
+</header>

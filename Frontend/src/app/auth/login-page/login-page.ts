@@ -5,6 +5,5 @@ import { LoginComponent } from '../login-component/login-component';
   selector: 'app-login-page',
   imports: [LoginComponent],
   templateUrl: './login-page.html',
-  styleUrl: './login-page.scss',
 })
 export class LoginPage {}
