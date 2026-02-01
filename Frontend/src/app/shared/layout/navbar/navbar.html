@@ -41,10 +41,26 @@
                 </svg>
             </div>
 
-            <!-- Avatar (always visible) -->
-            <div
-                class="w-7 h-7 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center cursor-pointer">
-                <span class="text-xs text-gray-700 dark:text-gray-300">U</span>
+            <!-- Avatar wrapper (relative) -->
+            <div class="relative inline-block">
+
+                <!-- Avatar (always visible) -->
+                <div (click)="isAvatarOpen = !isAvatarOpen"
+                    class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center cursor-pointer">
+                    <span class="text-xs text-gray-700 dark:text-gray-300">{{ userName().charAt(0) }}</span>
+                </div>
+
+                <!-- Dropdown (shown when avatar clicked) -->
+                @if(isAvatarOpen){
+                <div
+                    class="absolute right-0 mt-2 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded shadow-lg z-50">
+                    <button (click)="logout()"
+                        class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                        Logout
+                    </button>
+                </div>
+                }
+
             </div>
 
             <!-- Mobile menu button -->

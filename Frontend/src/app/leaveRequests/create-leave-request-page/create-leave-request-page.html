@@ -1,0 +1,117 @@
+<div class="max-w-5xl mx-auto p-6">
+
+    <!-- Page Header -->
+    <div class="flex items-center gap-3 mb-6">
+        <i class="fa fa-calendar-times text-xl"></i>
+        <h1 class="text-xl font-semibold text-gray-800">
+            Submit Leave Request
+        </h1>
+    </div>
+
+    <!-- Content -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white rounded-lg shadow p-6">
+
+        <!-- Left: Illustration -->
+        <div class="flex items-center justify-center">
+            <img src="assets/leave-request/3steps.webp" alt="Leave request steps"
+                class="w-full max-w-sm h-auto object-contain" />
+        </div>
+
+        <!-- Right: Form -->
+        <form class="space-y-5" (ngSubmit)="submit()">
+
+            @if(errorMessage()){
+            <!-- Error Message -->
+            <div
+                class="mb-4 p-3 border border-red-400 bg-red-50 text-red-700 rounded-lg text-sm flex items-center gap-2">
+                <i class="fa fa-exclamation-circle"></i>
+                <span>{{ errorMessage() }}</span>
+            </div>
+            }
+            <!-- Leave Type -->
+            <div>
+                <label class="block mb-1 text-sm font-medium text-gray-700">
+                    Select Leave Type
+                </label>
+
+                <ng-select name="leaveTypeId" [items]="leaveTypes" bindLabel="name" bindValue="id"
+                    [(ngModel)]="leaveRequest().leaveTypeId" placeholder="Select leave type">
+                </ng-select>
+            </div>
+
+            <!-- Duration -->
+            <div>
+                <label class="block mb-2 text-sm font-medium text-gray-700">
+                    Duration
+                </label>
+
+                <div class="flex gap-4">
+                    <label class="flex items-center gap-2">
+                        <input type="radio" name="duration" [value]="false" [(ngModel)]="halfDay"
+                            (change)="setHalfDay(false)" />
+                        <span>All Day</span>
+                    </label>
+
+                    <label class="flex items-center gap-2">
+                        <input type="radio" name="duration" [value]="true" [(ngModel)]="halfDay"
+                            (change)="setHalfDay(true)" />
+                        <span>Half Day</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Dates -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block mb-1 text-sm font-medium text-gray-700">
+                        Start Date
+                    </label>
+                    <input type="date" name="startDate" [(ngModel)]="leaveRequest().startDate"
+                        (change)="calculateDuration()" class="w-full px-3 py-2 border rounded-lg" />
+                </div>
+
+                @if(!halfDay()){
+
+                <div>
+                    <label class="block mb-1 text-sm font-medium text-gray-700">
+                        End Date
+                    </label>
+                    <input type="date" name="endDate" [(ngModel)]="leaveRequest().endDate"
+                        (change)="calculateDuration()" class="w-full px-3 py-2 border rounded-lg" />
+                </div>
+                }
+            </div>
+
+            <!-- Reason -->
+            <div>
+                <label class="block mb-1 text-sm font-medium text-gray-700">
+                    Reason
+                </label>
+                <textarea rows="3" name="reason" [(ngModel)]="leaveRequest().reason"
+                    placeholder="Enter reason for leave" class="w-full px-3 py-2 border rounded-lg">
+        </textarea>
+            </div>
+
+            <!-- Summary -->
+            <div class="p-3 bg-gray-50 rounded-lg text-sm text-center">
+                Requested days:
+                <span class="font-semibold">
+                    {{ leaveRequest().durationInDays }}
+                </span>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-end gap-3">
+                <button type="button" (click)="cancel()" class="px-6 py-2 border rounded-lg">
+                    Cancel
+                </button>
+
+                <button type="submit" class="px-6 py-2 bg-brand-primary text-white rounded-lg">
+                    Submit Request
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
