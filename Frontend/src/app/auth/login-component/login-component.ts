@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
 import { AuthService } from '../../shared/services/auth-service';
 
 @Component({
@@ -14,8 +15,8 @@ export class LoginComponent {
     email: '',
     password: '',
   };
-
   isLoading = signal(false);
+  errorMessage = signal<string | null>(null);
   showPassword = false;
 
   constructor(
@@ -26,26 +27,31 @@ export class LoginComponent {
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
-
-  onSubmit(form: any) {
-    if (form.invalid) {
-      return;
-    }
-
+  clearError(): void {
+    this.errorMessage.set(null);
+  }
+  onSubmit(form: NgForm) {
+    if (form.invalid || this.isLoading()) return;
     this.isLoading.set(true);
-    this.authService.login(this.model.email, this.model.password).subscribe({
-      next: (response) => {
-        this.isLoading.set(false);
-        this.authService.saveToken((response as any).token);
-        this.router.navigate(['/dashboard']);
+    this.errorMessage.set(null);
 
-        alert('Logged in successfully');
-      },
-      error: (error) => {
-        // console.error('Login error:', error);
-        this.isLoading.set(false);
-        alert(`Login failed: ${error.error.message}`);
-      },
-    });
+    this.authService
+      .login(this.model.email, this.model.password)
+      .pipe(finalize(() => this.isLoading.set(false)))
+      .subscribe({
+        next: (response: any) => {
+          this.authService.saveToken(response.token);
+          this.router.navigate(['/dashboard']);
+
+          // alert('Logged in successfully');
+        },
+        error: (err: any) => {
+          this.errorMessage.set(
+            err.error.message || 'Invalid email or password',
+          );
+          // console.error('Login error:', err.message);
+          // alert(`Login failed: ${error.error.message}`);
+        },
+      });
   }
 }
