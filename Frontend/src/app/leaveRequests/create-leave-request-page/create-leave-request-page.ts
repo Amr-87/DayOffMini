@@ -1,43 +1,40 @@
-import { Location } from '@angular/common';
+import { Location, NgClass } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CreateLeaveRequestDTO } from '../../shared/models/create-leave-request-dto';
 import { EmployeeDTO } from '../../shared/models/employee-dto';
 import { LeaveTypeDTO } from '../../shared/models/LeaveTypeDTO';
-import { AuthService } from '../../shared/services/auth-service';
 import { EmployeesServices } from '../../shared/services/employees-services';
 import { LeaveTypesService } from '../../shared/services/leave-types-service';
+
+type MessageType = 'error' | 'success';
 
 @Component({
   selector: 'app-create-leave-request-page',
   standalone: true,
-  imports: [FormsModule, NgSelectModule],
+  imports: [FormsModule, NgSelectModule, NgClass],
   templateUrl: './create-leave-request-page.html',
   styleUrl: './create-leave-request-page.scss',
 })
 export class CreateLeaveRequestPage implements OnInit {
-  // userId: number | null = null;
+  message = signal<{ type: MessageType; text: string } | null>(null);
+  submitting = signal(false);
+  halfDay = signal(false);
+  employeeId = signal<number | undefined>(undefined);
   employees: EmployeeDTO[] = [];
   leaveTypes: LeaveTypeDTO[] = [];
-  employeeId = signal<number | undefined>(undefined);
-
-  // Signals
   leaveRequest = signal<CreateLeaveRequestDTO>({
     leaveTypeId: 0,
-    durationInDays: 0,
+    durationInDays: 1,
     startDate: this.formatDate(new Date()),
     endDate: this.formatDate(new Date()),
     reason: '',
   });
 
-  halfDay = signal(false);
-  errorMessage = signal<string | undefined>(undefined);
-
   constructor(
     private location: Location,
     private leaveTypesService: LeaveTypesService,
-    private authService: AuthService,
     private employeesService: EmployeesServices,
   ) {}
 
@@ -57,15 +54,19 @@ export class CreateLeaveRequestPage implements OnInit {
         }));
       }
     });
-
-    // this.userId = this.authService.getUserId();
   }
 
   cancel(): void {
     this.location.back();
   }
 
-  submit(): void {
+  submit(form: NgForm): void {
+    if (form.invalid || !this.employeeId()) {
+      return;
+    }
+    this.submitting.set(true);
+    this.clearMessage();
+
     // Calculate duration first
     this.calculateDuration();
 
@@ -77,22 +78,37 @@ export class CreateLeaveRequestPage implements OnInit {
       endDate: new Date(lr.endDate).toISOString(),
     };
 
-    console.log('payload :', payload);
-    console.log('employeeId :', this.employeeId());
+    // console.log('payload :', payload);
+    // console.log('employeeId :', this.employeeId());
 
-    if (this.employeeId()) {
-      this.employeesService
-        .createLeaveRequest(this.employeeId()!, payload)
-        .subscribe({
-          next: (res) => {
-            console.log('Leave request submitted successfully:', res);
-          },
-          error: (err: Error) => {
-            this.errorMessage.set(err.message);
-          },
-          complete: () => console.log('Request completed'),
-        });
-    }
+    this.employeesService
+      .createLeaveRequest(this.employeeId()!, payload)
+      .subscribe({
+        next: (res) => {
+          this.message.set({
+            type: 'success',
+            text: 'Leave request created successfully',
+          });
+
+          // form.resetForm();
+          this.halfDay.set(false);
+          this.leaveRequest.set({
+            leaveTypeId: this.leaveTypes[0]?.id ?? 0,
+            durationInDays: 1,
+            startDate: this.formatDate(new Date()),
+            endDate: this.formatDate(new Date()),
+            reason: '',
+          });
+        },
+        error: (err: Error) => {
+          this.message.set({
+            type: 'error',
+            text: err.message || 'Failed to create leave request',
+          });
+          this.submitting.set(false);
+        },
+        complete: () => this.submitting.set(false),
+      });
   }
 
   setHalfDay(value: boolean): void {
@@ -132,5 +148,9 @@ export class CreateLeaveRequestPage implements OnInit {
 
   private formatDate(date: Date): string {
     return date.toISOString().split('T')[0];
+  }
+
+  clearMessage(): void {
+    this.message.set(null);
   }
 }
