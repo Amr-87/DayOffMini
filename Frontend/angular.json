@@ -27,7 +27,8 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/@ng-select/ng-select/themes/default.theme.css"
             ]
           },
           "configurations": {
@@ -80,9 +81,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ]
+            "styles": ["src/styles.scss"]
           }
         }
       }

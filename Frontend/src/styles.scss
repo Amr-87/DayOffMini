@@ -1,3 +1,25 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((color: (primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    ));
+}
+
+body {
+  color-scheme: light;
+
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  // Reset the user agent margin.
+  margin: 0;
+}
+
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
 
@@ -6,8 +28,41 @@
 
 /* 🎨 Theme */
 @theme {
-    --color-brand-primary: #FD3177;
-    --color-brand-primary-hover: #e12b68;
-    --color-bg-light: #f9fafb;
-    --color-bg-dark: #111827;
+  --color-brand-primary: #FD3177;
+  --color-brand-primary-hover: #e12b68;
+  --color-bg-light: #f9fafb;
+  --color-bg-dark: #111827;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.ng-select-tailwind .ng-select-container {
+  @apply bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg;
+}
+
+.ng-select-tailwind .ng-dropdown-panel {
+  @apply bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200;
+}
+
+.ng-select-tailwind .ng-option:hover {
+  @apply bg-gray-100 dark:bg-gray-700;
+}
+
+////////////////
+.ng-select-right-icon {
+  position: absolute;
+  right: 2.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  opacity: 0.7;
+  pointer-events: none;
 }
