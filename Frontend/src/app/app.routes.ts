@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginPage } from './auth/login-page/login-page';
 import { DashboardPage } from './dashboard-page/dashboard-page';
+import { CreateLeaveRequestPage } from './leaveRequests/create-leave-request-page/create-leave-request-page';
 import { LeaveBalancesReportPage } from './reportCenter/leaveBalancesReport/leave-balances-report-page/leave-balances-report-page';
 import { ReportCenterPage } from './reportCenter/report-center-page/report-center-page';
 import { authGuard } from './shared/guards/auth-guard';
@@ -31,6 +32,7 @@ export const routes: Routes = [
           { path: 'balances', component: LeaveBalancesReportPage },
         ],
       },
+      { path: 'request-employee', component: CreateLeaveRequestPage },
     ],
   },
 

@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { SKIP_GLOBAL_ERROR } from '../interceptors/error-interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -12,10 +13,16 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string) {
-    return this.http.post(this.baseUrl + '/login', {
-      email,
-      password,
-    });
+    return this.http.post(
+      this.baseUrl + '/login',
+      {
+        email,
+        password,
+      },
+      {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR, true),
+      },
+    );
   }
 
   getUserById(userId: number) {

@@ -1,7 +1,7 @@
 import { Component, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { ReportFiltersModel } from '../ReportFiltersModel';
+import { ReportFiltersModel } from '../../models/ReportFiltersModel';
 
 @Component({
   selector: 'app-filters-bar',

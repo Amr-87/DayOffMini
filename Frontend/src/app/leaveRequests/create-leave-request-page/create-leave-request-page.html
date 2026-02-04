@@ -1,0 +1,143 @@
+<div class="max-w-5xl mx-auto p-2">
+
+    <!-- Page Header -->
+    <div class="flex items-center gap-3 mb-6">
+        <i class="fa fa-calendar-times text-xl"></i>
+        <h1 class="text-xl font-semibold text-gray-800">
+            Submit Leave Request
+        </h1>
+    </div>
+
+    <!-- Content -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white rounded-lg shadow p-6">
+
+        <!-- Left: Illustration -->
+        <div class="flex items-center justify-center">
+            <img src="assets/leave-request/3steps.webp" alt="Leave request steps"
+                class="w-full max-w-sm h-auto object-contain" />
+        </div>
+
+        <!-- Right: Form -->
+        <form #leaveForm="ngForm" class="space-y-5" (ngSubmit)="submit(leaveForm)">
+
+            @if (message()) {
+            <div class="mb-4 p-3 rounded-lg text-sm flex items-center gap-2 border" [ngClass]="{
+                  'bg-red-50 border-red-400 text-red-700': message()!.type === 'error',
+                  'bg-green-50 border-green-400 text-green-700': message()!.type === 'success'
+                }">
+                <i class="fa" [ngClass]="{
+                    'fa-exclamation-circle': message()!.type === 'error',
+                    'fa-check-circle': message()!.type === 'success'
+                  }"></i>
+                <span>{{ message()!.text }}</span>
+            </div>
+            }
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <!-- Select Employee -->
+                <div>
+                    <label class="block mb-1 text-sm font-medium text-gray-700">
+                        Select Employee
+                    </label>
+
+                    <ng-select required (change)="clearMessage()" name="employeeId" [items]="employees" bindLabel="name"
+                        bindValue="id" [(ngModel)]="employeeId" placeholder="Select employee">
+                    </ng-select>
+                </div>
+
+                <!-- Select Leave Type -->
+                <div>
+                    <label class="block mb-1 text-sm font-medium text-gray-700">
+                        Select Leave Type
+                    </label>
+
+                    <ng-select required (change)="clearMessage()" name="leaveTypeId" [items]="leaveTypes"
+                        bindLabel="name" bindValue="id" [(ngModel)]="leaveRequest().leaveTypeId"
+                        placeholder="Select leave type">
+                    </ng-select>
+                </div>
+
+            </div>
+
+
+            <!-- Duration -->
+            <div>
+                <label class="block mb-2 text-sm font-medium text-gray-700">
+                    Duration
+                </label>
+
+                <div class="flex gap-4">
+                    <label class="flex items-center gap-2">
+                        <input required type="radio" name="duration" [value]="false" [(ngModel)]="halfDay"
+                            (change)="setHalfDay(false); clearMessage()" />
+                        <span>All Day</span>
+                    </label>
+
+                    <label class="flex items-center gap-2">
+                        <input required type="radio" name="duration" [value]="true" [(ngModel)]="halfDay"
+                            (change)="setHalfDay(true); clearMessage()" />
+                        <span>Half Day</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Dates -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block mb-1 text-sm font-medium text-gray-700">
+                        Start Date
+                    </label>
+                    <input required type="date" name="startDate" [(ngModel)]="leaveRequest().startDate"
+                        (change)="calculateDuration(); clearMessage()" class="w-full px-3 py-2 border rounded-lg" />
+                </div>
+
+                @if(!halfDay()){
+
+                <div>
+                    <label class="block mb-1 text-sm font-medium text-gray-700">
+                        End Date
+                    </label>
+                    <input required type="date" name="endDate" [(ngModel)]="leaveRequest().endDate"
+                        (change)="calculateDuration(); clearMessage()" class="w-full px-3 py-2 border rounded-lg" />
+                </div>
+                }
+            </div>
+
+            <!-- Reason -->
+            <div>
+                <label class="block mb-1 text-sm font-medium text-gray-700">
+                    Reason
+                </label>
+                <textarea required (input)="clearMessage()" rows="3" name="reason" [(ngModel)]="leaveRequest().reason"
+                    placeholder="Enter reason for leave" class="w-full px-3 py-2 border rounded-lg">
+        </textarea>
+            </div>
+
+            <!-- Summary -->
+            <div class="p-3 bg-gray-50 rounded-lg text-sm text-center">
+                Requested days:
+                <span class="font-semibold">
+                    {{ leaveRequest().durationInDays }}
+                </span>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-end gap-3">
+                <button type="button" (click)="cancel()" class="px-6 py-2 border rounded-lg">
+                    Cancel
+                </button>
+
+                <button type="submit" [disabled]="leaveForm.invalid || submitting()" class="px-6 py-2 rounded-lg text-white
+                         bg-brand-primary
+                         disabled:bg-gray-300
+                         disabled:cursor-not-allowed">
+                    Submit Request
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>

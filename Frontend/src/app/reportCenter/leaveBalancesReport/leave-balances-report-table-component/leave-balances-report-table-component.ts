@@ -13,10 +13,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { EmployeesServices } from '../../../employees/employees-services';
-import { LeaveTypeDTO } from '../../../leaveTypes/LeaveTypeDTO';
+import { LeaveTypeDTO } from '../../../shared/models/LeaveTypeDTO';
+import { EmployeesServices } from '../../../shared/services/employees-services';
 import { LeaveBalancesReportService } from '../../../shared/services/leave-balances-report-service';
-import { LeaveBalancesReportDTO } from '../LeaveBalancesReportDTO';
+import { LeaveBalancesReportDTO } from '../../models/LeaveBalancesReportDTO';
 
 @Component({
   selector: 'app-leave-balances-report-table',

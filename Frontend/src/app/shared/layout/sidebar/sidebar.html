@@ -1,12 +1,18 @@
 <aside class="w-56 h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
     <nav class="p-4 space-y-2">
 
-        <!-- Add New Button -->
-        <button
-            class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-brand-primary text-white font-semibold rounded-lg hover:opacity-90 transition">
-            <i class="fa fa-plus"></i>
-            Add New
-        </button>
+        <div class="relative w-full" appClickOutside (appClickOutside)="closePopup()">
+            <!-- Add New Button -->
+            <button (click)="togglePopup()"
+                class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-brand-primary text-white font-semibold rounded-lg hover:opacity-90 transition">
+                <i class="fa fa-plus"></i>
+                Add New
+            </button>
+            <!-- Popup -->
+            @if(isPopupOpen) {
+            <app-add-new-modal-component></app-add-new-modal-component>
+            }
+        </div>
 
         <!-- Dashboard -->
         <a routerLink="/dashboard" routerLinkActive="bg-gray-100 dark:bg-gray-800 text-blue-600"

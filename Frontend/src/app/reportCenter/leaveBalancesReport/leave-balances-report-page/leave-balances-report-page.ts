@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { LeaveTypeDTO } from '../../../leaveTypes/LeaveTypeDTO';
 import { NgSelectIconDirective } from '../../../shared/directives/ng-select-icon-directive';
+import { LeaveTypeDTO } from '../../../shared/models/LeaveTypeDTO';
+import { ReportFiltersModel } from '../../models/ReportFiltersModel';
 import { FiltersBar } from '../filters-bar/filters-bar';
 import { LeaveBalancesReportTableComponent } from '../leave-balances-report-table-component/leave-balances-report-table-component';
-import { ReportFiltersModel } from '../ReportFiltersModel';
 
 @Component({
   selector: 'app-leave-balances-report-page',
