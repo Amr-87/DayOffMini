@@ -7,7 +7,6 @@ import { Sidebar } from '../sidebar/sidebar';
   selector: 'app-navbar',
   imports: [Sidebar],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.scss',
 })
 export class navbar {
   userName = signal(''); // later get from JWT or API

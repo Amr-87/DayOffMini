@@ -23,7 +23,6 @@ import { LeaveBalancesReportTableComponent } from '../leave-balances-report-tabl
     NgSelectIconDirective,
   ],
   templateUrl: './leave-balances-report-page.html',
-  styleUrl: './leave-balances-report-page.scss',
 })
 export class LeaveBalancesReportPage {
   leaveTypes = signal<LeaveTypeDTO[]>([]);

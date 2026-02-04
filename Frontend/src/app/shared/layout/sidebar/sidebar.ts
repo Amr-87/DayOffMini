@@ -12,7 +12,6 @@ import { AddNewModalComponent } from '../add-new-modal-component/add-new-modal-c
     ClickOutsideDirective,
   ],
   templateUrl: './sidebar.html',
-  styleUrl: './sidebar.scss',
 })
 export class Sidebar {
   isPopupOpen = false;
