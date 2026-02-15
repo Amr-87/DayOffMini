@@ -10,7 +10,7 @@
             </button>
             <!-- Popup -->
             @if(isPopupOpen) {
-            <app-add-new-modal-component></app-add-new-modal-component>
+            <app-add-new-modal-component (click)="closePopup()"></app-add-new-modal-component>
             }
         </div>
 

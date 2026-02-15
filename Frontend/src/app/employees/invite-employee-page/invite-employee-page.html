@@ -1,0 +1,127 @@
+<div class="  ">
+    <!-- Page Header -->
+    <div class="mb-3">
+        <h1 class="text-xl font-bold text-gray-700 dark:text-gray-100">
+            Invite employee
+        </h1>
+    </div>
+    <div class="w-full">
+        <!-- Card -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 w-full">
+            <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="w-full space-y-10">
+
+                <!-- ================= Section ================= -->
+                <div>
+                    <!-- Section Header -->
+                    <div class="mb-6 border-b border-gray-200 dark:border-gray-800 pb-3">
+                        <h2 class="text-lg font-semibold tracking-wide text-gray-500 dark:text-gray-400">
+                            General information:
+                        </h2>
+                    </div>
+
+                    <div class="space-y-6">
+
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Email address
+                            </label>
+
+                            <input [(ngModel)]="employeee.email" name="email" #email="ngModel" type="email" required
+                                email class="w-full px-4 py-2.5 rounded-lg border
+                                   bg-white dark:bg-gray-800
+                                   text-gray-900 dark:text-gray-100
+                                   placeholder-gray-400 dark:placeholder-gray-500
+                                   outline-none transition
+                                   focus:ring-2 focus:ring-brand-primary focus:border-brand-primary" [ngClass]="{
+                                'border-gray-300 dark:border-gray-700': !email.invalid || (!email.touched && !form.submitted),
+                                'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500':
+                                    email.invalid && (email.touched || form.submitted)
+                            }" placeholder="john@company.com" />
+
+                            <!-- Error Messages -->
+                            @if(email.invalid && (email.touched || form.submitted)){
+                            <div class="mt-2 text-sm text-red-600 dark:text-red-400">
+                                @if(email.errors?.['required']){
+                                <span>
+                                    Email address is required.
+                                </span>
+                                }
+                                @if(email.errors?.['email']){
+                                <span>
+                                    Please enter a valid email address.
+                                </span>
+                                }
+                            </div>
+                            }
+                        </div>
+
+                        <!-- Name -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Employee name
+                            </label>
+
+                            <input [(ngModel)]="employeee.name" name="name" #name="ngModel" type="text" required
+                                minlength="2" class="w-full px-4 py-2.5 rounded-lg border
+                               bg-white dark:bg-gray-800
+                               text-gray-900 dark:text-gray-100
+                               placeholder-gray-400 dark:placeholder-gray-500
+                               outline-none transition
+                               focus:ring-2 focus:ring-brand-primary focus:border-brand-primary" [ngClass]="{
+                            'border-gray-300 dark:border-gray-700': !name.invalid || (!name.touched && !form.submitted),
+                            'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500':
+                                name.invalid && (name.touched || form.submitted)
+                        }" placeholder="John Doe" />
+
+                            <!-- Error Messages -->
+                            @if(name.invalid && (name.touched || form.submitted)){
+                            <div class="mt-2 text-sm text-red-600 dark:text-red-400">
+
+                                @if(name.errors?.['required']){
+                                <span>
+                                    Employee name is required.
+                                </span>
+                                }
+
+                                @if(name.errors?.['minlength']){
+                                <span>
+                                    Name must be at least 2 characters.
+                                </span>
+                                }
+
+                            </div>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================= Actions ================= -->
+                <div
+                    class="flex md:justify-end justify-center gap-3 pt-6 border-t border-gray-200 dark:border-gray-800">
+
+                    <button (click)="cancel()" type="button" class="px-5 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700
+                   text-sm font-medium
+                   text-gray-600 dark:text-gray-300
+                   hover:bg-gray-100 dark:hover:bg-gray-800
+                   transition">
+                        Cancel
+                    </button>
+
+                    <button type="submit" [disabled]="form.invalid" class="px-5 py-2.5 rounded-lg
+                   bg-brand-primary hover:bg-brand-primary/90
+                   disabled:opacity-50 disabled:cursor-not-allowed
+                   text-white text-sm font-medium
+                   focus:ring-2 focus:ring-brand-primary focus:ring-offset-2
+                   dark:focus:ring-offset-gray-900
+                   transition shadow-sm">
+                        Save
+                    </button>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
