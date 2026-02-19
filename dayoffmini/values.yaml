@@ -5,13 +5,13 @@ mysql:
   storage: 10Gi
 
 backend:
-  image: amrsregistry/dayoffmini-backend:1.0.0
-  replicas: 2
+  image: amrsregistry/dayoffmini-backend:1.0.1
+  replicas: 1
   port: 5000
 
 frontend:
-  image: amrsregistry/dayoffmini-frontend:1.0.0
-  replicas: 2
+  image: amrsregistry/dayoffmini-frontend:1.0.1
+  replicas: 1
   port: 80
 
 migrator:
