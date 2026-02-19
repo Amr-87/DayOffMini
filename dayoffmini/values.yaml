@@ -10,7 +10,7 @@ backend:
   port: 5000
 
 frontend:
-  image: dayoffmini-frontend:latest
+  image: amrsregistry/dayoffmini-frontend:1.0.0
   replicas: 2
   port: 80
 
