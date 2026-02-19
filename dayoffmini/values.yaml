@@ -1,0 +1,22 @@
+mysql:
+  image: mysql:8.0
+  database: DayOffMiniDb
+  rootPassword: root
+  storage: 10Gi
+
+backend:
+  image: amrsregistry/dayoffmini-backend:1.0.0
+  replicas: 2
+  port: 5000
+
+frontend:
+  image: amrsregistry/dayoffmini-frontend:1.0.0
+  replicas: 2
+  port: 80
+
+migrator:
+  image: amrsregistry/dayoffmini-migrator:1.0.0
+
+ingress:
+  enabled: true
+  host: dayoff.local
