@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: {{ .Values.backend.replicas }}
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: {{ .Values.backend.image }}
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:{{ .Values.backend.port }}
+            - name: ConnectionStrings__DefaultConnection
+              value: "server=mysql-service;port=3306;database={{ .Values.mysql.database }};user=root;password={{ .Values.mysql.rootPassword }}"
+          ports:
+            - containerPort:  {{ .Values.backend.port }}

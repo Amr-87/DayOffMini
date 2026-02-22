@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrator
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrator
+          image:  {{ .Values.migrator.image }}
+          env:
+            - name: ConnectionStrings__DefaultConnection
+              value: "server=mysql-service;port=3306;database={{ .Values.mysql.database }};user=root;password={{ .Values.mysql.rootPassword }}"

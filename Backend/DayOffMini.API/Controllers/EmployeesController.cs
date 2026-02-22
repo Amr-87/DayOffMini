@@ -25,7 +25,7 @@ namespace DayOffMini.API.Controllers
 
         #region Employees
         [HttpPost]
-        [Authorize(Policy = "HRManagerOnly")]
+        //[Authorize(Policy = "HRManagerOnly")]
         public async Task<IActionResult> Create([FromBody] CreateEmployeeDto dto)
         {
             await _employeeService.CreateAsync(dto);

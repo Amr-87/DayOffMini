@@ -1,0 +1,15 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0
+
+WORKDIR /src
+
+COPY Backend/ ./Backend/
+
+WORKDIR /src/Backend
+RUN dotnet restore
+
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+ENV ConnectionStrings__DefaultConnection="server=db;port=3306;database=DayOffMiniDb;user=root;password=root"
+
+CMD ["dotnet", "ef", "database", "update", "--project", "DayOffMini.Infrastructure", "--startup-project", "DayOffMini.API"]

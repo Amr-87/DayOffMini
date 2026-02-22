@@ -41,4 +41,13 @@ export class EmployeesServices {
         }),
       );
   }
+
+  addEmployee(employee: EmployeeDTO) {
+    return this.http.post(`${this.baseUrl}`, employee).pipe(
+      catchError((error) => {
+        const message = error?.error?.error || 'Failed to create employee';
+        return throwError(() => new Error(message));
+      }),
+    );
+  }
 }
